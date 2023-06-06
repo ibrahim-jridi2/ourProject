@@ -1,10 +1,12 @@
 package com.campers.now.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,10 +31,11 @@ public class Reservation implements Serializable {
     private Date createdAt = new Date();
     @Temporal(TemporalType.DATE)
     private Date modifiedAt;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private CampingCenter campingCenter;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Activity activity;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({"campingCenter"})
+    private List<Activity> activities;
 }

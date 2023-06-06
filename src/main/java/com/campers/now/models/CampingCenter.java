@@ -27,7 +27,7 @@ public class CampingCenter implements Serializable {
     private String location;
     private float price;
     private int discount;
-    private int maxNbr;
+    private int capacity;
     private boolean isActive;
     @Temporal(TemporalType.DATE)
     private Date createdAt = new Date();

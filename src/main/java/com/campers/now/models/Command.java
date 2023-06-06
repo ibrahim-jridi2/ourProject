@@ -28,7 +28,7 @@ public class Command implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date modifiedAt;
     @NotNull
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User buyer;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "command", fetch = FetchType.EAGER)
     private List<ProductCommand> productCommands;

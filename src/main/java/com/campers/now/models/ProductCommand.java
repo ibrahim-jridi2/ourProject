@@ -24,6 +24,6 @@ public class ProductCommand implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private int quantity;
-    private int priceTotal;
+    private float priceTotal;
 
 }

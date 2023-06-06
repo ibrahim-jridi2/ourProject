@@ -25,14 +25,14 @@ public class Activity implements Serializable {
     private float price;
     private float duration;
     private int number;
-    private int maxNbr;
+    private int capacity;
     private boolean isActive;
     @Temporal(TemporalType.DATE)
     private Date createdAt = new Date();
     @Temporal(TemporalType.DATE)
     private Date modifiedAt;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private CampingCenter campingCenter;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "activity")
