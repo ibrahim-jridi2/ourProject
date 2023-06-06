@@ -9,7 +9,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Locale;
 
 @Tag(name = "Feedback Management")
 @RestController
@@ -37,7 +36,6 @@ public class FeedBackController {
     @GetMapping
     public List<FeedBack> getAll(Integer page, String sort, String dir) {
 
-        dir = dir.toUpperCase(Locale.ROOT);
         Sort.Direction sortDir = Sort.Direction.fromString(StringUtils.hasText(dir) ? dir.toUpperCase() : Sort.Direction.ASC.name());
         return feedBackService.getAll(page, sort, sortDir);
     }

@@ -2,10 +2,12 @@ package com.campers.now.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -27,10 +29,10 @@ public class Activity implements Serializable {
     private int number;
     private int capacity;
     private boolean isActive;
-    @Temporal(TemporalType.DATE)
-    private Date createdAt = new Date();
-    @Temporal(TemporalType.DATE)
-    private Date modifiedAt;
+    @CreationTimestamp
+    private Instant createdAt;
+    @UpdateTimestamp
+    private Instant modifiedAt;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private CampingCenter campingCenter;

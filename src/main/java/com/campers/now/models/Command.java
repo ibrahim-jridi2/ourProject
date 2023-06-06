@@ -1,11 +1,13 @@
 package com.campers.now.models;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -23,10 +25,10 @@ public class Command implements Serializable {
     private String matricule;
     private boolean isActive;
     private boolean isConfirmed;
-    @Temporal(TemporalType.DATE)
-    private Date createdAt = new Date();
-    @Temporal(TemporalType.DATE)
-    private Date modifiedAt;
+    @CreationTimestamp
+    private Instant createdAt;
+    @UpdateTimestamp
+    private Instant modifiedAt;
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     private User buyer;

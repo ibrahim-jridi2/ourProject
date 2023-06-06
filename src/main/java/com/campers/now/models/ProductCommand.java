@@ -2,9 +2,12 @@ package com.campers.now.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -25,5 +28,9 @@ public class ProductCommand implements Serializable {
     private Integer id;
     private int quantity;
     private float priceTotal;
+    @CreationTimestamp
+    private Instant createdAt;
+    @UpdateTimestamp
+    private Instant modifiedAt;
 
 }

@@ -2,10 +2,12 @@ package com.campers.now.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -30,10 +32,10 @@ public class User implements Serializable {
     private boolean isEmailValide;
     private boolean isActive;
     private boolean tokenExpired;
-    @Temporal(TemporalType.DATE)
-    private Date createdAt = new Date();
-    @Temporal(TemporalType.DATE)
-    private Date modifiedAt;
+    @CreationTimestamp
+    private Instant createdAt;
+    @UpdateTimestamp
+    private Instant modifiedAt;
     @Enumerated(EnumType.STRING)
     @ManyToMany
     @JoinTable(

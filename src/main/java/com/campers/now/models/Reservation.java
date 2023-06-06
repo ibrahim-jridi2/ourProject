@@ -2,9 +2,12 @@ package com.campers.now.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -27,10 +30,10 @@ public class Reservation implements Serializable {
     private Date dateStart;
     @Temporal(TemporalType.DATE)
     private Date dateEnd;
-    @Temporal(TemporalType.DATE)
-    private Date createdAt = new Date();
-    @Temporal(TemporalType.DATE)
-    private Date modifiedAt;
+    @CreationTimestamp
+    private Instant createdAt;
+    @UpdateTimestamp
+    private Instant modifiedAt;
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
     @ManyToOne(fetch = FetchType.EAGER)

@@ -46,10 +46,10 @@ public class SetupDataLoader implements
         createRoleIfNotFound(RoleType.ROLE_CAMPER);
 
         /*
-        *
-        * Uncomment to add random activities
-        *
-        * */
+         *
+         * Uncomment to add random activities
+         *
+         * */
         /*for (int i = 1; i < 21; i++) {
             Activity activity = new Activity();
             activity.setPrice(i+4);
@@ -68,7 +68,6 @@ public class SetupDataLoader implements
             user.setRoles(List.of(adminRole));
             user.setActive(true);
             user.setEmailValide(true);
-            user.setModifiedAt(new Date());
             userRepository.save(user);
         }
 

@@ -1,10 +1,12 @@
 package com.campers.now.models;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -20,10 +22,10 @@ public class Reclamation implements Serializable {
     private String label;
     private String description;
     private boolean isActive;
-    @Temporal(TemporalType.DATE)
-    private Date createdAt = new Date();
-    @Temporal(TemporalType.DATE)
-    private Date modifiedAt;
+    @CreationTimestamp
+    private Instant createdAt;
+    @UpdateTimestamp
+    private Instant modifiedAt;
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
     @ManyToOne(fetch = FetchType.EAGER)

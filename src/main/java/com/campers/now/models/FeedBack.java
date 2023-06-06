@@ -1,6 +1,8 @@
 package com.campers.now.models;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -23,9 +25,11 @@ public class FeedBack implements Serializable {
     private int likes;
     private int dislikes;
     private boolean isActive;
-    @Temporal(TemporalType.DATE)
-    private Date createdAt = new Date();
-    @Temporal(TemporalType.DATE)
+
+    @CreationTimestamp
+    private Date createdAt;
+
+    @UpdateTimestamp
     private Date modifiedAt;
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
