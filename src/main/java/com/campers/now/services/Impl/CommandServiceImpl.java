@@ -44,18 +44,21 @@ public class CommandServiceImpl implements CommandService {
     @Transactional
     public Command add(Command o) {
         try {
-
             var prodComs = o.getProductCommands();
+
+            prodComs.forEach(productCommand -> {
+                var p = productRepository.findById(productCommand.getProduct().getId());
+                p.ifPresent(product -> {
+                    var priceAfterDiscount = product.getPrice() * (100 - product.getDiscount()) / 100;
+                    var total = priceAfterDiscount * productCommand.getQuantity();
+                    productCommand.setPriceTotal(total);
+                });
+            });
             o.setProductCommands(null);
             Command command = commandRepository.save(o);
             prodComs.forEach(productCommand -> productCommand.setCommand(command));
-            productCommandRepository.saveAll(prodComs);
-            /*o.getProductCommands().forEach(productCommand -> {
-                var prod = productRepository.findById(productCommand.getProduct().getId());
-                prod.ifPresent(productCommand::setProduct);
-                log.info(prod.get().toString());
-            });*/
-
+            var productCommands = productCommandRepository.saveAll(prodComs);
+            command.setProductCommands(productCommands);
             return command;
         } catch (Exception e) {
             throw new RuntimeException(e);
