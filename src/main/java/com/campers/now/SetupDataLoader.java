@@ -1,7 +1,6 @@
 package com.campers.now;
 
 
-import com.campers.now.models.Activity;
 import com.campers.now.models.Role;
 import com.campers.now.models.User;
 import com.campers.now.models.enums.RoleType;
@@ -42,21 +41,27 @@ public class SetupDataLoader implements
         if (alreadySetup)
             return;
 
+        createRoleIfNotFound(RoleType.ROLE_SUPER_ADMIN);
         createRoleIfNotFound(RoleType.ROLE_ADMIN);
-        createRoleIfNotFound(RoleType.ROLE_VENDOR);
         createRoleIfNotFound(RoleType.ROLE_CAMPER);
 
-        for (int i = 1; i < 21; i++) {
-            Activity activity = new Activity()/* activityRepository.findById(i).get()*/;
+        /*
+        *
+        * Uncomment to add random activities
+        *
+        * */
+        /*for (int i = 1; i < 21; i++) {
+            Activity activity = new Activity();
             activity.setPrice(i+4);
-            activity.setDuration(2);
+            activity.setDuration(20);
             activityRepository.save(activity);
-        }
+        }*/
+
         User user = new User();
 
         user.setEmail("admin@test.com");
         if (userRepository.countByEmail(user.getEmail()) == 0) {
-            Role adminRole = roleRepository.findByName(RoleType.ROLE_ADMIN);
+            Role adminRole = roleRepository.findByName(RoleType.ROLE_SUPER_ADMIN);
             user.setNom("admin");
             user.setPrenom("admin");
             user.setPassword("admin");
