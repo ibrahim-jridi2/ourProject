@@ -1,12 +1,12 @@
 package com.campers.now;
 
 
+import com.campers.now.models.Comment;
+import com.campers.now.models.Post;
 import com.campers.now.models.Role;
 import com.campers.now.models.User;
 import com.campers.now.models.enums.RoleType;
-import com.campers.now.repositories.ActivityRepository;
-import com.campers.now.repositories.RoleRepository;
-import com.campers.now.repositories.UserRepository;
+import com.campers.now.repositories.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -30,6 +29,10 @@ public class SetupDataLoader implements
     private UserRepository userRepository;
     @Autowired
     private ActivityRepository activityRepository;
+    @Autowired
+    private PostRepository postRepository;
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -46,15 +49,16 @@ public class SetupDataLoader implements
         createRoleIfNotFound(RoleType.ROLE_CAMPER);
 
         /*
+         * Uncomment to add random posts
          *
-         * Uncomment to add random activities
-         *
-         * */
-        /*for (int i = 1; i < 21; i++) {
-            Activity activity = new Activity();
-            activity.setPrice(i+4);
-            activity.setDuration(20);
-            activityRepository.save(activity);
+         for (int i = 1; i < 21; i++) {
+            Post post = new Post();
+            post.setDetails("Lorem " + i * 1523);
+            var savedPost = postRepository.save(post);
+            var comment = new Comment();
+            comment.setDetails("GG");
+            comment.setPost(post);
+            commentRepository.save(comment);
         }*/
 
         User user = new User();

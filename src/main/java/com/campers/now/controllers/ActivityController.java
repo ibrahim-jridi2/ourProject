@@ -34,7 +34,9 @@ public class ActivityController {
     }
 
     @GetMapping
-    public List<Activity> getAll(Integer page, String sort, String dir) {
+    public List<Activity> getAll(@RequestParam(value = "page", required = false) Integer page,
+                            @RequestParam(value = "sort", required = false) String sort,
+                            @RequestParam(value = "dir", required = false) String dir) {
 
         Sort.Direction sortDir = Sort.Direction.fromString(StringUtils.hasText(dir) ? dir.toUpperCase() : Sort.Direction.ASC.name());
         return activityService.getAll(page, sort, sortDir);
