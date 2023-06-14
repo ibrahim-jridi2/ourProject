@@ -6,7 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -15,28 +15,20 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FeedBack implements Serializable {
+public class Comment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String label;
-    private String description;
-    private int rating;
+    private String details;
     private int likes;
     private int dislikes;
     private boolean isActive;
-
     @CreationTimestamp
-    private Date createdAt;
-
+    private Instant createdAt;
     @UpdateTimestamp
-    private Date modifiedAt;
+    private Instant modifiedAt;
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
     @ManyToOne(fetch = FetchType.EAGER)
-    private CampingCenter campingCenter;
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Product product;
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Activity activity;
+    private Post post;
 }
