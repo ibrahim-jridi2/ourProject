@@ -25,6 +25,7 @@ public class CampingCenter implements Serializable {
     private Integer id;
     @NotNull
     private String label;
+    private String image;
     private String description;
     private String location;
     private float price;

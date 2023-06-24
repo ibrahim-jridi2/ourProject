@@ -14,6 +14,8 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("activities")
+@CrossOrigin(origins = "http://localhost:4200")
+
 public class ActivityController {
     ActivityService activityService;
 
