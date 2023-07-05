@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("reservations")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ReservationController {
     private final ReservationService reservationService;
 
