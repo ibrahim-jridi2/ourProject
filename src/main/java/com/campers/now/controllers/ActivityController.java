@@ -19,10 +19,11 @@ import java.util.List;
 public class ActivityController {
     ActivityService activityService;
 
-    @PostMapping
-    public Activity add(@RequestBody Activity activity) {
-        return activityService.add(activity);
+    @PostMapping("")
+    public Activity addActivitybyCampingcenterId(@RequestParam("campingcenterId") Integer campingcenterId, @RequestBody Activity activity) {
+        return activityService.addActivitybyCampingcenterId(campingcenterId, activity);
     }
+
 
     @PutMapping("/{id}")
     public Activity update(@RequestBody Activity activity, @PathVariable("id") Integer id) {

@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -44,8 +43,10 @@ public class CampingCenterController {
     public void delete(@PathVariable("id") Integer id) {
         campingCenterService.delete(id);
     }
-  @PostMapping("/upload")
-    public void uploadImage(@RequestBody MultipartFile image) {
-        campingCenterService.uploadImage(image);
+
+    @PostMapping("/addActivity")
+    public CampingCenter addActivitybyCampingcenterId(@RequestParam("campingcenterId") Integer campingcenterId,  @RequestParam("activityId") Integer activityId) {
+        return campingCenterService.addActivitybyCampingcenterId(campingcenterId, activityId);
     }
+
 }
