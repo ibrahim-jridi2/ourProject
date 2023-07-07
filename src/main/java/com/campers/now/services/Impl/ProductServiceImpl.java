@@ -4,15 +4,10 @@ import com.campers.now.models.Product;
 import com.campers.now.repositories.ProductRepository;
 import com.campers.now.services.ProductService;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -20,17 +15,18 @@ public class ProductServiceImpl implements ProductService {
     ProductRepository productRepository;
 
     @Override
-    public List<Product> getAll(Integer pageNumber, String property, Sort.Direction direction) {
-        if (pageNumber == null)
-            return productRepository.findAll();
-        return productRepository.findAll(PageRequest.of((pageNumber <= 0 ? 1 : pageNumber) - 1, 10, Sort.by(List.of(Sort.Order.by(StringUtils.hasText(property) ? property : "id").with(direction)))))
-                .stream().collect(Collectors.toUnmodifiableList());
+    public List<Product> getAll() {
+        return productRepository.findAll();
     }
 
     @Override
     public Product getById(Integer id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        if (optionalProduct.isPresent()) {
+            return optionalProduct.get();
+        } else {
+            throw new IllegalArgumentException("Product not found");
+        }
     }
 
     @Override
@@ -43,13 +39,38 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product update(Product o) {
-        getById(o.getId());
-        try {
-            return productRepository.save(o);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    public Product update(Integer id, Product updatedProduct) {
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        if (optionalProduct.isPresent()) {
+            Product existingProduct = optionalProduct.get();
+            existingProduct.setMatricule(updatedProduct.getMatricule());
+            existingProduct.setName(updatedProduct.getName());
+            existingProduct.setDescription(updatedProduct.getDescription());
+            existingProduct.setImage(updatedProduct.getImage());
+            existingProduct.setDiscount(updatedProduct.getDiscount());
+            existingProduct.setPrice(updatedProduct.getPrice());
+            existingProduct.setStock(updatedProduct.getStock());
+            existingProduct.setVendingType(updatedProduct.getVendingType());
+            existingProduct.setActive(updatedProduct.isActive());
+            existingProduct.setVendor(updatedProduct.getVendor());
+
+            return productRepository.save(existingProduct);
+        } else {
+            throw new IllegalArgumentException("Product not found");
         }
+    }
+
+    @Override
+    public Product delete(Integer id) {
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        if (optionalProduct.isPresent()) {
+            Product product = optionalProduct.get();
+            productRepository.delete(product);
+            return product;
+        } else {
+            throw new IllegalArgumentException("Product not found");
+        }
+
     }
 
 }

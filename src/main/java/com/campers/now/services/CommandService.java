@@ -1,16 +1,17 @@
 package com.campers.now.services;
 
 import com.campers.now.models.Command;
-import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
 public interface CommandService {
-    List<Command> getAll(Integer pageNumber, String property, Sort.Direction direction);
+    List<Command> getAllCommands();
 
-    Command getById(Integer id);
+    Command getCommandById(int id);
 
-    Command add(Command o);
+    Command createCommand(Command command);
 
-    Command update(Command o);
+    Command updateCommand(int id, Command command);
+
+    void deleteCommand(int id);
 }

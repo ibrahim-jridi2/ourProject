@@ -1,16 +1,17 @@
 package com.campers.now.services;
 
 import com.campers.now.models.Product;
-import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
 public interface ProductService {
-    List<Product> getAll(Integer pageNumber, String property, Sort.Direction direction);
+    List<Product> getAll();
 
     Product getById(Integer id);
 
-    Product add(Product o);
+    Product add(Product product);
 
-    Product update(Product o);
+    Product update(Integer id, Product updatedProduct);
+
+    Product delete(Integer id);
 }
