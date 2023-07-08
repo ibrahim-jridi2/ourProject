@@ -5,6 +5,7 @@ import com.campers.now.services.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
+    @Secured("ROLE_SUPER_ADMIN")
     public User add(@RequestBody User user) {
         return userService.add(user);
     }
@@ -29,11 +31,13 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @Secured("ROLE_SUPER_ADMIN")
     public User getOne(@PathVariable("id") Integer id) {
         return userService.getById(id);
     }
 
     @GetMapping
+    @Secured("ROLE_SUPER_ADMIN")
     public List<User> getAll(@RequestParam(value = "page", required = false) Integer page,
                             @RequestParam(value = "sort", required = false) String sort,
                             @RequestParam(value = "dir", required = false) String dir) {
