@@ -22,8 +22,10 @@ public class Activity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String label;
+    private String image;
     private String description;
     private int discount;
+
     private float price;
     private float duration;
     private int number;

@@ -1,16 +1,11 @@
 package com.campers.now;
 
 
-import com.campers.now.models.Comment;
-import com.campers.now.models.Post;
 import com.campers.now.models.Role;
 import com.campers.now.models.User;
 import com.campers.now.models.enums.RoleType;
 import com.campers.now.repositories.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;

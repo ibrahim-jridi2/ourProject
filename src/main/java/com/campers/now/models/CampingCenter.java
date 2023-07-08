@@ -15,7 +15,6 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -25,11 +24,13 @@ public class CampingCenter implements Serializable {
     private Integer id;
     @NotNull
     private String label;
+    private String image;
     private String description;
     private String location;
     private float price;
     private int discount;
     private int capacity;
+    private int telephone;
     private boolean isActive;
     @CreationTimestamp
     private Instant createdAt;

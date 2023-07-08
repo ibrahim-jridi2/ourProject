@@ -4,10 +4,8 @@ import com.campers.now.models.CampingCenter;
 import com.campers.now.services.CampingCenterService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.access.annotation.Secured;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,14 +13,16 @@ import java.util.List;
 @Tag(name = "Camping Center Management")
 @RestController
 @AllArgsConstructor
+@Slf4j
 @RequestMapping("camping-centers")
+@CrossOrigin(origins = "http://localhost:4200")
 public class CampingCenterController {
     private final CampingCenterService campingCenterService;
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public CampingCenter add(@RequestBody CampingCenter campingCenter) {
-        return campingCenterService.add(campingCenter);
+    public void add(@RequestBody CampingCenter campingCenter) {
+        campingCenterService.add(campingCenter);
     }
 
     @PutMapping("/{id}")
@@ -38,11 +38,17 @@ public class CampingCenterController {
     }
 
     @GetMapping
-    public List<CampingCenter> getAll(@RequestParam(value = "page", required = false) Integer page,
-                            @RequestParam(value = "sort", required = false) String sort,
-                            @RequestParam(value = "dir", required = false) String dir) {
+    public List<CampingCenter> getAll() {
 
-        Sort.Direction sortDir = Sort.Direction.fromString(StringUtils.hasText(dir) ? dir.toUpperCase() : Sort.Direction.ASC.name());
-        return campingCenterService.getAll(page, sort, sortDir);
+        return campingCenterService.getAll();
+    }
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") Integer id) {
+        campingCenterService.delete(id);
+    }
+
+    @PostMapping("/addActivity")
+    public CampingCenter addActivitybyCampingcenterId(@RequestParam("campingcenterId") Integer campingcenterId,  @RequestParam("activityId") Integer activityId) {
+        return campingCenterService.addActivitybyCampingcenterId(campingcenterId, activityId);
     }
 }

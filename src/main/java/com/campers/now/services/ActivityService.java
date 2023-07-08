@@ -9,9 +9,10 @@ public interface ActivityService {
 
     List<Activity> getAll(Integer pageNumber, String property, Sort.Direction direction);
 
+
     Activity getById(Integer id);
 
-    Activity add(Activity o);
+    Activity addActivitybyCampingcenterId(Integer campingcenterId, Activity activity);
 
     Activity update(Activity o);
 

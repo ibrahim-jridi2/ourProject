@@ -4,10 +4,7 @@ import com.campers.now.models.Product;
 import com.campers.now.services.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +13,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("products")
+@CrossOrigin
 public class ProductController {
     private final ProductService productService;
 
@@ -27,9 +25,8 @@ public class ProductController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Product update(@RequestBody Product product, @PathVariable("id") Integer id) {
-        product.setId(id);
-        return productService.update(product);
+    public Product update(@PathVariable("id") Integer id, @RequestBody Product updatedProduct) {
+        return productService.update(id, updatedProduct);
     }
 
     @GetMapping("/{id}")
@@ -38,11 +35,11 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<Product> getAll(@RequestParam(value = "page", required = false) Integer page,
-                            @RequestParam(value = "sort", required = false) String sort,
-                            @RequestParam(value = "dir", required = false) String dir) {
-
-        Sort.Direction sortDir = Sort.Direction.fromString(StringUtils.hasText(dir) ? dir.toUpperCase() : Sort.Direction.ASC.name());
-        return productService.getAll(page, sort, sortDir);
+    public List<Product> getAll() {
+        return productService.getAll();
+    }
+    @DeleteMapping("/{id}")
+    public Product delete(@PathVariable("id") Integer id) {
+        return productService.delete(id);
     }
 }

@@ -4,10 +4,9 @@ import com.campers.now.models.Command;
 import com.campers.now.services.CommandService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,35 +15,52 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("commands")
+@CrossOrigin
 public class CommandController {
     private final CommandService commandService;
 
+    @GetMapping
+    public ResponseEntity<List<Command>> getAllCommands() {
+        List<Command> commands = commandService.getAllCommands();
+        if (commands.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(commands);
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Command> getCommandById(@PathVariable("id") int id) {
+        Command command = commandService.getCommandById(id);
+        if (command != null) {
+            return new ResponseEntity<>(command, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PostMapping
     @PreAuthorize("hasRole('ROLE_CAMPER')")
-    public Command add(@RequestBody Command command) {
-        return commandService.add(command);
+    public ResponseEntity<Command> createCommand(@RequestBody Command command) {
+        Command createdCommand = commandService.createCommand(command);
+        return new ResponseEntity<>(createdCommand, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_CAMPER')")
-    public Command update(@RequestBody Command command, @PathVariable("id") Integer id) {
-        command.setId(id);
-        return commandService.update(command);
+    public ResponseEntity<Command> updateCommand(@PathVariable("id") int id, @RequestBody Command command) {
+        Command updatedCommand = commandService.updateCommand(id, command);
+        if (updatedCommand != null) {
+            return new ResponseEntity<>(updatedCommand, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    @GetMapping("/{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_CAMPER')")
-    public Command getOne(@PathVariable("id") Integer id) {
-        return commandService.getById(id);
-    }
-
-    @GetMapping
-    @PreAuthorize("hasRole('ROLE_CAMPER')")
-    public List<Command> getAll(@RequestParam(value = "page", required = false) Integer page,
-                            @RequestParam(value = "sort", required = false) String sort,
-                            @RequestParam(value = "dir", required = false) String dir) {
-
-        Sort.Direction sortDir = Sort.Direction.fromString(StringUtils.hasText(dir) ? dir.toUpperCase() : Sort.Direction.ASC.name());
-        return commandService.getAll(page, sort, sortDir);
+    public ResponseEntity<Void> deleteCommand(@PathVariable("id") int id) {
+        commandService.deleteCommand(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
