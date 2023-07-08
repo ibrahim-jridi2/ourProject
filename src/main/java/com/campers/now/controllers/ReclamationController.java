@@ -5,6 +5,7 @@ import com.campers.now.services.ReclamationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,11 +30,13 @@ public class ReclamationController {
     }
 
     @GetMapping("/{id}")
+    @Secured("ROLE_SUPER_ADMIN")
     public Reclamation getOne(@PathVariable("id") Integer id) {
         return reclamationService.getById(id);
     }
 
     @GetMapping
+    @Secured("ROLE_SUPER_ADMIN")
     public List<Reclamation> getAll(@RequestParam(value = "page", required = false) Integer page,
                             @RequestParam(value = "sort", required = false) String sort,
                             @RequestParam(value = "dir", required = false) String dir) {

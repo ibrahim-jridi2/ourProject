@@ -5,6 +5,8 @@ import com.campers.now.services.ReservationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,11 +20,13 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_CAMPER')")
     public Reservation add(@RequestBody Reservation reservation) {
         return reservationService.add(reservation);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_CAMPER')")
     public Reservation update(@RequestBody Reservation reservation, @PathVariable("id") Integer id) {
         reservation.setId(id);
         return reservationService.update(reservation);
@@ -34,6 +38,7 @@ public class ReservationController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Reservation> getAll(@RequestParam(value = "page", required = false) Integer page,
                             @RequestParam(value = "sort", required = false) String sort,
                             @RequestParam(value = "dir", required = false) String dir) {

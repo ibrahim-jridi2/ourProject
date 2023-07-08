@@ -5,6 +5,8 @@ import com.campers.now.services.PostService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,11 +20,13 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_CAMPER')")
     public Post add(@RequestBody Post post) {
         return postService.add(post);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_CAMPER')")
     public Post update(@RequestBody Post post, @PathVariable("id") Integer id) {
         post.setId(id);
         return postService.update(post);

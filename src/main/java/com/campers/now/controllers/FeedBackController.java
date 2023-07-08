@@ -5,6 +5,8 @@ import com.campers.now.services.FeedBackService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +20,7 @@ public class FeedBackController {
     private final FeedBackService feedBackService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_CAMPER')")
     public FeedBack add(@RequestBody FeedBack feedBack) {
         return feedBackService.add(feedBack);
     }
