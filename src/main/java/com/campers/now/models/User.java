@@ -21,17 +21,18 @@ import java.util.List;
 )*/
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String nom;
     private String prenom;
+    @Column(unique = true)
     private String email;
+    @JsonIgnore
     private String password;
     private boolean isEmailValide;
     private boolean isActive;
