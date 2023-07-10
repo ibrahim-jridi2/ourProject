@@ -34,14 +34,14 @@ public class JwtService {
 
     public boolean isTokenValid(String token,UserDetails userDetails){
         final String username = extractUserName(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (username.equals(userDetails.getUsername()) && isTokenNotExpired(token));
     }
 
-    private boolean isTokenExpired(String token) {
-        return extractExpiraation(token).before(new Date(System.currentTimeMillis()));
+    public boolean isTokenNotExpired(String token) {
+        return !extractExpiration(token).before(new Date(System.currentTimeMillis()));
     }
 
-    private Date extractExpiraation(String token) {
+    private Date extractExpiration(String token) {
         return extractClaim(token,Claims::getExpiration);
     }
 
@@ -53,7 +53,7 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24 * 15))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60*60 * 24 * 15))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

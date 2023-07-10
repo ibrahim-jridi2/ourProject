@@ -1,4 +1,4 @@
-package com.campers.now.auth;
+package com.campers.now.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

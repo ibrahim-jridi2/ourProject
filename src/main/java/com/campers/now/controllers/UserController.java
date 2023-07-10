@@ -1,11 +1,13 @@
 package com.campers.now.controllers;
 
 import com.campers.now.models.User;
+import com.campers.now.utils.UserRequest;
 import com.campers.now.services.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,18 +23,19 @@ public class UserController {
 
     @PostMapping
     @Secured("ROLE_SUPER_ADMIN")
-    public User add(@RequestBody User user) {
+    public User add(@RequestBody UserRequest user) {
+        System.out.println(user);
         return userService.add(user);
     }
 
     @PutMapping("/{id}")
-    public User update(@RequestBody User user, @PathVariable("id") Integer id) {
+    public User update(@RequestBody UserRequest user, @PathVariable("id") Integer id) {
         user.setId(id);
         return userService.update(user);
     }
 
     @GetMapping("/{id}")
-    @Secured("ROLE_SUPER_ADMIN")
+    @PreAuthorize("hasRole('ROLE_CAMPER')")
     public User getOne(@PathVariable("id") Integer id) {
         return userService.getById(id);
     }

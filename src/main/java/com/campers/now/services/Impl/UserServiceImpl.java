@@ -1,36 +1,62 @@
 package com.campers.now.services.Impl;
 
+import com.campers.now.config.JwtService;
+import com.campers.now.exceptions.BadRequestHttpException;
+import com.campers.now.exceptions.NotFoundHttpException;
+import com.campers.now.exceptions.UnAuthorizedHttpException;
 import com.campers.now.models.Role;
 import com.campers.now.models.User;
+import com.campers.now.utils.UserRequest;
+import com.campers.now.models.enums.RoleType;
 import com.campers.now.repositories.UserRepository;
 import com.campers.now.services.UserService;
+import io.jsonwebtoken.Claims;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
 @Transactional
+@Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
     UserRepository userRepository;
-    PasswordEncoder passwordEncoder;
+
+    private static User buildUser(UserRequest o) {
+        return User.builder()
+                .id(o.getId())
+                .nom(o.getNom())
+                .prenom(o.getPrenom())
+                .email(o.getEmail())
+                .isEmailValide(false)
+                .isActive(true)
+                .tokenExpired(false)
+                .password(o.getPassword())
+                .roles(o.getRoles())
+                .build();
+    }
 
     @Override
     public List<User> getAll(Integer pageNumber, String property, Sort.Direction direction) {
@@ -42,39 +68,79 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User getById(Integer id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        HttpServletRequest request = requestAttributes.getRequest();
+
+        // Retrieve the token from the header
+        String token = request.getHeader("Authorization").substring(7);
+        JwtService jwtService = new JwtService();
+        var idClaim = Integer.valueOf(jwtService.extractClaim(token, Claims::getId));
+        log.debug(idClaim.toString());
+        if (!idClaim.equals(id) && principal.getAuthorities().stream().noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(RoleType.ROLE_SUPER_ADMIN.name()))) {
+            throw new UnAuthorizedHttpException("Unauthorized access");
+        } else {
+            return userRepository.findById(id)
+                    .orElseThrow(() -> new NotFoundHttpException("User not found"));
+        }
     }
 
     @Override
     @Transactional
-    public User add(User o) {
+    public User add(UserRequest o) {
+        if (userRepository.findByEmail(o.getEmail()).isPresent()) {
+            throw new BadRequestHttpException("Email unavailable");
+        }
         try {
-            o.setPassword(passwordEncoder.encode(o.getPassword()));
-            return userRepository.save(o);
+            o.setPassword(new BCryptPasswordEncoder().encode(o.getPassword()));
+            var user = buildUser(o);
+            return userRepository.save(user);
         } catch (Exception e) {
+            if (e instanceof IllegalArgumentException) throw new BadRequestHttpException("invalid request");
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public User update(User o) {
+    public String getPasswordByEmail(String email) {
+        return userRepository.getPasswordByEmail(email);
+    }
+
+    @Override
+    public User update(UserRequest o) {
         var original = getById(o.getId());
-        o.setPassword(original.getPassword());
+        var userByEmail = userRepository.findByEmail(o.getEmail());
+        if (userByEmail.isPresent() && !Objects.equals(userByEmail.get().getId(), original.getId())) {
+            throw new BadRequestHttpException("Email unavailable");
+        }
+        o.setPassword(getPasswordByEmail(original.getEmail()));
+        o.setId(original.getId());
+        var user = buildUser(o);
         try {
-            return userRepository.save(o);
+            return userRepository.save(user);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
+    @Transactional
+    public User getByEmail(String email) {
+        var user = userRepository.findByEmail(email).orElseThrow(
+                () -> new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invalid credentials"));
+        var pass = userRepository.getPasswordByEmail(email);
+        user.setPassword(pass);
+        return user;
+    }
+
+    @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByEmail(username);
-        if (user.isPresent()) {
-            return new org.springframework.security.core.userdetails.User(user.get().getEmail(), user.get().getPassword(), user.get().isActive()
+        User user = getByEmail(username);
+        if (user != null) {
+            return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.isActive()
                     , true, true,
-                    true, getAuthorities(user.get().getRoles()));
+                    true, getAuthorities(user.getRoles()));
         }
         throw new UsernameNotFoundException("User not found");
     }

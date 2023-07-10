@@ -1,65 +1,74 @@
 package com.campers.now.services.Impl;
 
-import com.campers.now.auth.AuthenticationResponse;
-import com.campers.now.auth.LoginRequest;
-import com.campers.now.auth.RegisterRequest;
+import com.campers.now.utils.AuthenticationResponse;
+import com.campers.now.utils.LoginRequest;
+import com.campers.now.utils.RegisterRequest;
 import com.campers.now.config.JwtService;
+import com.campers.now.exceptions.BadRequestHttpException;
+import com.campers.now.exceptions.UnAuthorizedHttpException;
 import com.campers.now.models.Role;
-import com.campers.now.models.User;
+import com.campers.now.utils.UserRequest;
 import com.campers.now.models.enums.RoleType;
 import com.campers.now.repositories.RoleRepository;
-import com.campers.now.repositories.UserRepository;
+import com.campers.now.services.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.HttpClientErrorException;
 
+import java.util.HashMap;
 import java.util.List;
 
 @AllArgsConstructor
 @Service
 @Transactional
 public class AuthenticationService {
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final RoleRepository roleRepository;
 
 
     public AuthenticationResponse authenticate(LoginRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
-        var user = userRepository.findByEmail(request.getEmail()).orElseThrow(
-                ()->new HttpClientErrorException(HttpStatus.NOT_FOUND));
-        var jwtToken = jwtService.generateToken(user);
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+        } catch (AuthenticationException e) {
+            throw new BadRequestHttpException("Invalid credentials");
+        }
+        var user = userService.getByEmail(request.getEmail());
+        if (!user.isActive())
+            throw new UnAuthorizedHttpException("Your account is no longer active, contact administrator");
+        var credentials = new HashMap<String, Object>();
+        credentials.put("jti", user.getId());
+        var jwtToken = jwtService.generateToken(credentials, user);
         return AuthenticationResponse.builder()
                 .token(jwtToken).build();
     }
 
     public AuthenticationResponse register(RegisterRequest request) {
         Role role = roleRepository.findByName(RoleType.ROLE_CAMPER);
-        var user = User.builder()
+        UserRequest user = UserRequest.builder()
                 .nom(request.getNom())
                 .prenom(request.getPrenom())
                 .email(request.getEmail())
                 .isEmailValide(false)
                 .isActive(true)
                 .tokenExpired(false)
-                .password(passwordEncoder.encode(request.getPassword()))
+                .password(request.getPassword())
                 .roles(List.of(role))
                 .build();
         try {
-            userRepository.save(user);
-            var jwtToken = jwtService.generateToken(user);
+            var addedUser = userService.add(user);
+            var credentials = new HashMap<String, Object>();
+            credentials.put("jti", addedUser.getId());
+            var jwtToken = jwtService.generateToken(credentials, addedUser);
             return AuthenticationResponse.builder()
                     .token(jwtToken).build();
         } catch (Exception e) {
