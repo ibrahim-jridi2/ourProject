@@ -1,5 +1,6 @@
 package com.campers.now.services.Impl;
 
+import com.campers.now.models.User;
 import com.campers.now.utils.AuthenticationResponse;
 import com.campers.now.utils.LoginRequest;
 import com.campers.now.utils.RegisterRequest;
@@ -45,11 +46,17 @@ public class AuthenticationService {
         var user = userService.getByEmail(request.getEmail());
         if (!user.isActive())
             throw new UnAuthorizedHttpException("Your account is no longer active, contact administrator");
-        var credentials = new HashMap<String, Object>();
-        credentials.put("jti", user.getId());
+        HashMap<String, Object> credentials = initializeCreds(user);
         var jwtToken = jwtService.generateToken(credentials, user);
         return AuthenticationResponse.builder()
-                .token(jwtToken).build();
+                .token(jwtToken).user(user).build();
+    }
+
+    private static HashMap<String, Object> initializeCreds(User user) {
+        var credentials = new HashMap<String, Object>();
+        credentials.put("jti", user.getId());
+        credentials.put("roles", user.getRoles());
+        return credentials;
     }
 
     public AuthenticationResponse register(RegisterRequest request) {
@@ -66,11 +73,10 @@ public class AuthenticationService {
                 .build();
         try {
             var addedUser = userService.add(user);
-            var credentials = new HashMap<String, Object>();
-            credentials.put("jti", addedUser.getId());
+            var credentials = initializeCreds(addedUser);
             var jwtToken = jwtService.generateToken(credentials, addedUser);
             return AuthenticationResponse.builder()
-                    .token(jwtToken).build();
+                    .token(jwtToken).user(addedUser).build();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
