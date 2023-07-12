@@ -32,7 +32,7 @@ public class Activity implements Serializable {
     private float duration;
     private int number;
     private int capacity;
-    private boolean isActive;
+    private boolean active;
     @CreationTimestamp
     private Instant createdAt;
     @UpdateTimestamp

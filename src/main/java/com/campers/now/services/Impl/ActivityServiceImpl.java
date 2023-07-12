@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.time.LocalDate;
+import java.time.Year;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,7 +47,6 @@ public class ActivityServiceImpl implements ActivityService {
         }
 
 
-
     @Override
     public Activity update(Activity o) {
         getById(o.getId());
@@ -53,6 +54,52 @@ public class ActivityServiceImpl implements ActivityService {
             return activityRepository.save(o);
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void updateActivityStatus() {
+        LocalDate currentDate = LocalDate.now();
+
+        List<Activity> activities = activityRepository.findAll();
+        for (Activity activity : activities) {
+            LocalDate seasonEndDate = calculateSeasonEndDate(activity.getSeason().toString());
+            if (seasonEndDate != null && currentDate.isAfter(seasonEndDate)) {
+                activity.setActive(false);
+            }
+        }
+
+        activityRepository.saveAll(activities);
+    }
+
+    private LocalDate calculateSeasonEndDate(String season) {
+        int currentYear = Year.now().getValue();
+        switch (season) {
+            case "SPRING":
+                return LocalDate.of(currentYear, 6, 20);
+            case "SUMMER":
+                return LocalDate.of(currentYear, 9, 22);
+            case "AUTUMN":
+                return LocalDate.of(currentYear, 12, 21);
+            case "WINTER":
+                return LocalDate.of(currentYear + 1, 3, 19);
+            default:
+                return null;
+        }
+    }
+
+
+    public List<Activity> getActiveActivities(Integer pageNumber, String property, Sort.Direction direction) {
+        if (pageNumber == null) {
+            return activityRepository.findByActiveTrue();
+        } else {
+            Sort.Order order = StringUtils.hasText(property)
+                    ? Sort.Order.by(property).with(direction).ignoreCase()
+                    : Sort.Order.by("id").with(direction);
+
+            PageRequest pageRequest = PageRequest.of((pageNumber <= 0 ? 1 : pageNumber) - 1, 10, Sort.by(order));
+
+            return activityRepository.findByActiveTrue(pageRequest).stream()
+                    .collect(Collectors.toUnmodifiableList());
         }
     }
 }
