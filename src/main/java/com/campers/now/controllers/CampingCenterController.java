@@ -5,6 +5,7 @@ import com.campers.now.services.CampingCenterService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,11 +20,13 @@ public class CampingCenterController {
     private final CampingCenterService campingCenterService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void add(@RequestBody CampingCenter campingCenter) {
         campingCenterService.add(campingCenter);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public CampingCenter update(@RequestBody CampingCenter campingCenter, @PathVariable("id") Integer id) {
         campingCenter.setId(id);
         return campingCenterService.update(campingCenter);
@@ -48,5 +51,4 @@ public class CampingCenterController {
     public CampingCenter addActivitybyCampingcenterId(@RequestParam("campingcenterId") Integer campingcenterId,  @RequestParam("activityId") Integer activityId) {
         return campingCenterService.addActivitybyCampingcenterId(campingcenterId, activityId);
     }
-
 }

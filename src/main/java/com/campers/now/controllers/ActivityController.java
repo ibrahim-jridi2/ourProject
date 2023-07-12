@@ -5,6 +5,7 @@ import com.campers.now.services.ActivityService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,17 +16,17 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("activities")
 @CrossOrigin(origins = "http://localhost:4200")
-
 public class ActivityController {
     ActivityService activityService;
 
     @PostMapping("")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Activity addActivitybyCampingcenterId(@RequestParam("campingcenterId") Integer campingcenterId, @RequestBody Activity activity) {
         return activityService.addActivitybyCampingcenterId(campingcenterId, activity);
     }
 
-
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Activity update(@RequestBody Activity activity, @PathVariable("id") Integer id) {
         activity.setId(id);
         return activityService.update(activity);

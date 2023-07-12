@@ -1,41 +1,37 @@
 package com.campers.now;
 
 
-import com.campers.now.models.Comment;
-import com.campers.now.models.Post;
 import com.campers.now.models.Role;
 import com.campers.now.models.User;
 import com.campers.now.models.enums.RoleType;
 import com.campers.now.repositories.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
 @Component
-@AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class SetupDataLoader implements
         ApplicationListener<ContextRefreshedEvent> {
 
     boolean alreadySetup;
 
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private ActivityRepository activityRepository;
-    @Autowired
-    private PostRepository postRepository;
-    @Autowired
-    private CommentRepository commentRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
+    private final ActivityRepository activityRepository;
+
+    private final PostRepository postRepository;
+
+    private final CommentRepository commentRepository;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final RoleRepository roleRepository;
 
     @Override
     @Transactional
@@ -68,7 +64,7 @@ public class SetupDataLoader implements
             Role adminRole = roleRepository.findByName(RoleType.ROLE_SUPER_ADMIN);
             user.setNom("admin");
             user.setPrenom("admin");
-            user.setPassword("admin");
+            user.setPassword(passwordEncoder.encode("admin"));
             user.setRoles(List.of(adminRole));
             user.setActive(true);
             user.setEmailValide(true);
@@ -79,7 +75,7 @@ public class SetupDataLoader implements
     }
 
     @Transactional
-    void createRoleIfNotFound(RoleType name) {
+    public void createRoleIfNotFound(RoleType name) {
 
         if (roleRepository.countByName(name) == 0) {
             Role role = Role.builder().name(name).build();

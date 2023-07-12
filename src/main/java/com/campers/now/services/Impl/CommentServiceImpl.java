@@ -1,11 +1,8 @@
 package com.campers.now.services.Impl;
 
 import com.campers.now.models.Comment;
-import com.campers.now.models.Post;
 import com.campers.now.repositories.CommentRepository;
-import com.campers.now.repositories.PostRepository;
 import com.campers.now.services.CommentService;
-import com.campers.now.services.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;

@@ -21,7 +21,7 @@ import java.util.List;
 public class Reservation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private int numberReserved;
     private boolean isActive;
     private boolean isConfirmed;

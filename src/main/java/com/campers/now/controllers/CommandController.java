@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,7 +17,6 @@ import java.util.List;
 @RequestMapping("commands")
 @CrossOrigin
 public class CommandController {
-
     private final CommandService commandService;
 
     @GetMapping
@@ -40,12 +40,14 @@ public class CommandController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_CAMPER')")
     public ResponseEntity<Command> createCommand(@RequestBody Command command) {
         Command createdCommand = commandService.createCommand(command);
         return new ResponseEntity<>(createdCommand, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_CAMPER')")
     public ResponseEntity<Command> updateCommand(@PathVariable("id") int id, @RequestBody Command command) {
         Command updatedCommand = commandService.updateCommand(id, command);
         if (updatedCommand != null) {
@@ -56,6 +58,7 @@ public class CommandController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_CAMPER')")
     public ResponseEntity<Void> deleteCommand(@PathVariable("id") int id) {
         commandService.deleteCommand(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -5,6 +5,7 @@ import com.campers.now.services.CommentService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,15 +15,18 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("comments")
+@CrossOrigin(origins = "http://localhost:4200")
 public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_CAMPER')")
     public Comment add(@RequestBody Comment comment) {
         return commentService.add(comment);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_CAMPER')")
     public Comment update(@RequestBody Comment comment, @PathVariable("id") Integer id) {
         comment.setId(id);
         return commentService.update(comment);
@@ -34,7 +38,7 @@ public class CommentController {
     }
 
     @GetMapping("/post/{id}")
-    public List<Comment> getOneByPost(@PathVariable("id") Integer id) {
+    public List<Comment> getCommentsByPost(@PathVariable("id") Integer id) {
         return commentService.getByPostId(id);
     }
 
