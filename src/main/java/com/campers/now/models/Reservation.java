@@ -23,6 +23,7 @@ public class Reservation implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private int numberReserved;
+    private int campingPeriod;
     private boolean isActive;
     private boolean isConfirmed;
     private float totalAmount;
