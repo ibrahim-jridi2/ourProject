@@ -1,5 +1,7 @@
 package com.campers.now.models;
 
+import com.campers.now.models.enums.Season;
+import com.campers.now.models.enums.VendingType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -29,12 +31,16 @@ public class Activity implements Serializable {
     private float price;
     private float duration;
     private int number;
+
     private int capacity;
-    private boolean isActive;
+    private boolean active;
     @CreationTimestamp
     private Instant createdAt;
     @UpdateTimestamp
     private Instant modifiedAt;
+
+    @Enumerated(EnumType.STRING)
+    private Season season;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private CampingCenter campingCenter;
