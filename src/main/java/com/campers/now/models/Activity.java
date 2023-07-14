@@ -31,6 +31,7 @@ public class Activity implements Serializable {
     private float price;
     private float duration;
     private int number;
+
     private int capacity;
     private boolean active;
     @CreationTimestamp
