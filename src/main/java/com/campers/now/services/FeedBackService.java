@@ -13,4 +13,18 @@ public interface FeedBackService {
     FeedBack add(FeedBack o);
 
     FeedBack update(FeedBack o);
+
+    List<FeedBack> getProductFeedbacks(Integer productId);
+
+    List<FeedBack> getCampingCenterFeedbacks(Integer campingCenterId);
+
+    List<FeedBack> getActivityFeedbacks(Integer activityId);
+
+    double getRatingByUserId(Integer userId, Integer feedbackId);
+
+    double getGeneralRatingByProductId(Integer productId);
+
+    double getGeneralRatingByCampingCenterId(Integer campingCenterId);
+
+    double getGeneralRatingByActivityId(Integer activityId);
 }
