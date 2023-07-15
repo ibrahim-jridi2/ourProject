@@ -1,7 +1,6 @@
 package com.campers.now.models;
 
 import com.campers.now.models.enums.Season;
-import com.campers.now.models.enums.VendingType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
