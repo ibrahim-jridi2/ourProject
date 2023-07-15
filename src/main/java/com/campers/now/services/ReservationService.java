@@ -13,4 +13,6 @@ public interface ReservationService {
     Reservation add(Reservation o);
 
     Reservation update(Reservation o);
-}
+     int calculateTotalNumberOfDays(List<Reservation> reservations) ;
+
+    }

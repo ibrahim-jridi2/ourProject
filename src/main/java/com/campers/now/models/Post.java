@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,7 +20,11 @@ public class Post implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private String title;
+    private String image;
     private String details;
+    @ElementCollection
+    private List<String> tags;
     private int likes;
     private int dislikes;
     private boolean isActive;
@@ -29,4 +34,5 @@ public class Post implements Serializable {
     private Instant modifiedAt;
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
+
 }

@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Slf4j
 @RequestMapping("camping-centers")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin
 public class CampingCenterController {
     private final CampingCenterService campingCenterService;
 
@@ -51,4 +51,14 @@ public class CampingCenterController {
     public CampingCenter addActivitybyCampingcenterId(@RequestParam("campingcenterId") Integer campingcenterId,  @RequestParam("activityId") Integer activityId) {
         return campingCenterService.addActivitybyCampingcenterId(campingcenterId, activityId);
     }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("calculateOccupancyRate")
+    public double[] calculateOccupancyRate(){
+        return campingCenterService.calculateOccupancyRate();
+    }
+    @GetMapping("calculateADR")
+    public  double[]  calculateADR(){
+        return campingCenterService.calculateADR();
+    }
+
 }
