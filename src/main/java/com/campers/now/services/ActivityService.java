@@ -21,6 +21,8 @@ public interface ActivityService {
 
     public List<Activity> getActiveActivities(Integer pageNumber, String property, Sort.Direction direction);
 
-    public ResponseEntity<?> addFavorite(Integer userId, Integer activityId);
+    public ResponseEntity<?> addFavorite(Integer activityId, Integer userId);
+
+    public List<Activity> getFavoritesActivities(Integer pageNumber, String property, Sort.Direction direction);
 
 }

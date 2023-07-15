@@ -82,4 +82,13 @@ public class ActivityController {
         return activityService.addFavorite(userId, activityId);
     }
 
+    @GetMapping("/favorites")
+    public List<Activity> getFavoritesActivities(@RequestParam(value = "page", required = false) Integer page,
+                                              @RequestParam(value = "sort", required = false) String sort,
+                                              @RequestParam(value = "dir", required = false) String dir) {
+
+        Sort.Direction sortDir = Sort.Direction.fromString(StringUtils.hasText(dir) ? dir.toUpperCase() : Sort.Direction.ASC.name());
+        return activityService.getFavoritesActivities(page, sort, sortDir);
+    }
+
 }
