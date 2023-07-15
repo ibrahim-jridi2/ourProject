@@ -20,8 +20,6 @@ public class Comment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String details;
-    private int likes;
-    private int dislikes;
     private boolean isActive;
     @CreationTimestamp
     private Instant createdAt;
@@ -29,6 +27,6 @@ public class Comment implements Serializable {
     private Instant modifiedAt;
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     private Post post;
 }
