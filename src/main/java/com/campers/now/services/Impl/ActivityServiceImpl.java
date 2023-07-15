@@ -2,13 +2,16 @@ package com.campers.now.services.Impl;
 
 import com.campers.now.models.Activity;
 import com.campers.now.models.CampingCenter;
+import com.campers.now.models.User;
 import com.campers.now.repositories.ActivityRepository;
 import com.campers.now.repositories.CampingCenterRepository;
+import com.campers.now.repositories.UserRepository;
 import com.campers.now.services.ActivityService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
@@ -17,6 +20,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -25,6 +29,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     ActivityRepository activityRepository;
     CampingCenterRepository campingCenterRepository;
+    UserRepository userRepository;
 
     @Override
     public List<Activity> getAll(Integer pageNumber, String property, Sort.Direction direction) {
@@ -105,6 +110,23 @@ public class ActivityServiceImpl implements ActivityService {
 
             return activityRepository.findByActiveTrue(pageRequest).stream()
                     .collect(Collectors.toUnmodifiableList());
+        }
+    }
+
+    public ResponseEntity<?> addFavorite(Integer userId, Integer activityId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        Optional<Activity> optionalActivity = activityRepository.findById(activityId);
+
+        if (optionalUser.isPresent() && optionalActivity.isPresent()) {
+            User user = optionalUser.get();
+            Activity activity = optionalActivity.get();
+
+            user.getActivities().add(activity);
+            userRepository.save(user);
+
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 }

@@ -9,7 +9,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -50,4 +52,8 @@ public class Activity implements Serializable {
     /*@OneToMany(cascade = CascadeType.ALL, mappedBy = "activity")
     @JsonIgnore
     private List<Reclamation> reclamations;*/
+
+    @ManyToMany(mappedBy = "activities")
+    private List<User> users;
+
 }

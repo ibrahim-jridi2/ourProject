@@ -72,6 +72,13 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<Reclamation> reclamations;
 
+    @ManyToMany
+    @JoinTable(
+            name = "favorite_activities",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "activity_id"))
+    private List<Activity> activities;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();

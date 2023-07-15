@@ -5,6 +5,7 @@ import com.campers.now.services.ActivityService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -73,6 +74,12 @@ public class ActivityController {
 
         Sort.Direction sortDir = Sort.Direction.fromString(StringUtils.hasText(dir) ? dir.toUpperCase() : Sort.Direction.ASC.name());
         return activityService.getActiveActivities(page, sort, sortDir);
+    }
+
+
+    @PostMapping("favorites/{activityId}/{userId}")
+    public ResponseEntity<?> addActivityToUser(@PathVariable Integer activityId, @PathVariable Integer userId) {
+        return activityService.addFavorite(userId, activityId);
     }
 
 }
