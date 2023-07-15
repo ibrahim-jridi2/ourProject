@@ -1,6 +1,8 @@
 package com.campers.now.controllers;
 
+import com.campers.now.models.Role;
 import com.campers.now.models.User;
+import com.campers.now.repositories.RoleRepository;
 import com.campers.now.utils.UserRequest;
 import com.campers.now.services.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,6 +22,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
     private final UserService userService;
+    private final RoleRepository roleRepository;
 
     @PostMapping
     @Secured("ROLE_SUPER_ADMIN")
@@ -48,5 +51,10 @@ public class UserController {
 
         Sort.Direction sortDir = Sort.Direction.fromString(StringUtils.hasText(dir) ? dir.toUpperCase() : Sort.Direction.ASC.name());
         return userService.getAll(page, sort, sortDir);
+    }
+
+    @GetMapping("roles")
+    public List<Role> getRoles() {
+        return roleRepository.findAll();
     }
 }
