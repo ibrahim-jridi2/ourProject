@@ -20,6 +20,7 @@ public class UserRequest {
     private Integer id;
     private String nom;
     private String prenom;
+    private String avatar;
     private String email;
     private boolean isEmailValide;
     private boolean isActive;

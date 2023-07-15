@@ -16,6 +16,10 @@ public interface CampingCenterService {
     void delete(Integer id);
 
     CampingCenter addActivitybyCampingcenterId(Integer campingcenterId, Integer activityId);
+    double[] calculateOccupancyRate() ;
+    double[]  calculateADR();
 
 
-}
+
+
+    }
