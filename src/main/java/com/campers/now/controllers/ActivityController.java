@@ -69,7 +69,7 @@ public class ActivityController {
         return activityService.getAll(page, sort, sortDir);
     }
 
-    @GetMapping("/upcoming")
+    @GetMapping("/active")
     public List<Activity> getActiveActivities(@RequestParam(value = "page", required = false) Integer page,
                                               @RequestParam(value = "sort", required = false) String sort,
                                               @RequestParam(value = "dir", required = false) String dir) {
