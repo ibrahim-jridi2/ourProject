@@ -25,13 +25,14 @@ public class ActivityController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Activity addActivitybyCampingcenterId(@RequestParam("campingcenterId") Integer campingcenterId, @RequestBody Activity activity) {
         String currentSeason = getCurrentSeason();
-        if (activity.getSeason().toString()==currentSeason) {
+        if (activity.getSeason().toString() == currentSeason) {
             activity.setActive(true);
         } else {
             activity.setActive(false);
         }
         return activityService.addActivitybyCampingcenterId(campingcenterId, activity);
     }
+
     private String getCurrentSeason() {
         LocalDate currentDate = LocalDate.now();
         int month = currentDate.getMonthValue();
@@ -46,6 +47,7 @@ public class ActivityController {
             return "WINTER";
         }
     }
+
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Activity update(@RequestBody Activity activity, @PathVariable("id") Integer id) {
@@ -60,35 +62,36 @@ public class ActivityController {
 
     @GetMapping
     public List<Activity> getAll(@RequestParam(value = "page", required = false) Integer page,
-                            @RequestParam(value = "sort", required = false) String sort,
-                            @RequestParam(value = "dir", required = false) String dir) {
+                                 @RequestParam(value = "sort", required = false) String sort,
+                                 @RequestParam(value = "dir", required = false) String dir) {
 
         Sort.Direction sortDir = Sort.Direction.fromString(StringUtils.hasText(dir) ? dir.toUpperCase() : Sort.Direction.ASC.name());
-         return activityService.getAll(page, sort, sortDir);
+        return activityService.getAll(page, sort, sortDir);
     }
 
     @GetMapping("/upcoming")
     public List<Activity> getActiveActivities(@RequestParam(value = "page", required = false) Integer page,
-                                 @RequestParam(value = "sort", required = false) String sort,
-                                 @RequestParam(value = "dir", required = false) String dir) {
+                                              @RequestParam(value = "sort", required = false) String sort,
+                                              @RequestParam(value = "dir", required = false) String dir) {
 
         Sort.Direction sortDir = Sort.Direction.fromString(StringUtils.hasText(dir) ? dir.toUpperCase() : Sort.Direction.ASC.name());
         return activityService.getActiveActivities(page, sort, sortDir);
     }
 
 
-    @PostMapping("favorites/{activityId}/{userId}")
+   @PostMapping("favorites/{activityId}/{userId}")
     public ResponseEntity<?> addActivityToUser(@PathVariable Integer activityId, @PathVariable Integer userId) {
         return activityService.addFavorite(userId, activityId);
     }
 
-    @GetMapping("/favorites")
+  @GetMapping("/favorites/{userId}")
     public List<Activity> getFavoritesActivities(@RequestParam(value = "page", required = false) Integer page,
-                                              @RequestParam(value = "sort", required = false) String sort,
-                                              @RequestParam(value = "dir", required = false) String dir) {
+                                                 @RequestParam(value = "sort", required = false) String sort,
+                                                 @RequestParam(value = "dir", required = false) String dir,
+                                                 @PathVariable Integer userId) {
 
         Sort.Direction sortDir = Sort.Direction.fromString(StringUtils.hasText(dir) ? dir.toUpperCase() : Sort.Direction.ASC.name());
-        return activityService.getFavoritesActivities(page, sort, sortDir);
+        return activityService.getFavoritesActivities(page, sort, sortDir,userId);
     }
 
 }

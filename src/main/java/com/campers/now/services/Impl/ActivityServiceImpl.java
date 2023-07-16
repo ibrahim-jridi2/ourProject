@@ -96,8 +96,6 @@ public class ActivityServiceImpl implements ActivityService {
         }
     }
 
-
-
     public List<Activity> getActiveActivities(Integer pageNumber, String property, Sort.Direction direction) {
         if (pageNumber == null) {
             return activityRepository.findByActiveTrue();
@@ -113,7 +111,7 @@ public class ActivityServiceImpl implements ActivityService {
         }
     }
 
-    public ResponseEntity<?> addFavorite(Integer activityId, Integer userId) {
+        public ResponseEntity<?> addFavorite(Integer activityId, Integer userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         Optional<Activity> optionalActivity = activityRepository.findById(activityId);
 
@@ -130,19 +128,8 @@ public class ActivityServiceImpl implements ActivityService {
         }
     }
 
-
-    public List<Activity> getFavoritesActivities(Integer pageNumber, String property, Sort.Direction direction) {
-        if (pageNumber == null) {
-            return activityRepository.findByActiveTrue();
-        } else {
-            Sort.Order order = StringUtils.hasText(property)
-                    ? Sort.Order.by(property).with(direction).ignoreCase()
-                    : Sort.Order.by("id").with(direction);
-
-            PageRequest pageRequest = PageRequest.of((pageNumber <= 0 ? 1 : pageNumber) - 1, 10, Sort.by(order));
-
-            return activityRepository.findByActiveTrue(pageRequest).stream()
-                    .collect(Collectors.toUnmodifiableList());
-        }
+    public List<Activity> getFavoritesActivities(Integer pageNumber, String property, Sort.Direction direction, Integer userId) {
+        return activityRepository.findActivitiesByUserId(userId);
     }
+
 }

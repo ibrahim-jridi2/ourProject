@@ -53,7 +53,8 @@ public class Activity implements Serializable {
     @JsonIgnore
     private List<Reclamation> reclamations;*/
 
-    @ManyToMany(mappedBy = "activities")
+
+    @ManyToMany(mappedBy = "activities",cascade = CascadeType.REMOVE)
     private List<User> users;
 
 }

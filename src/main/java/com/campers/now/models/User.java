@@ -77,11 +77,15 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<Reclamation> reclamations;
 
-    @ManyToMany
+/*    @ManyToMany
     @JoinTable(
             name = "favorite_activities",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "activity_id"))
+    private List<Activity> activities;*/
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JsonIgnore
     private List<Activity> activities;
 
     @Override

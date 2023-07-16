@@ -23,6 +23,6 @@ public interface ActivityService {
 
     public ResponseEntity<?> addFavorite(Integer activityId, Integer userId);
 
-    public List<Activity> getFavoritesActivities(Integer pageNumber, String property, Sort.Direction direction);
+    public List<Activity> getFavoritesActivities(Integer pageNumber, String property, Sort.Direction direction, Integer userId);
 
 }
