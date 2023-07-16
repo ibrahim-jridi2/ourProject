@@ -19,6 +19,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -131,5 +132,15 @@ public class ActivityServiceImpl implements ActivityService {
     public List<Activity> getFavoritesActivities(Integer pageNumber, String property, Sort.Direction direction, Integer userId) {
         return activityRepository.findActivitiesByUserId(userId);
     }
+    public List<Activity> getNotFavoritesActivities(Integer pageNumber, String property, Sort.Direction direction, Integer userId) {
+        return activityRepository.findNotFavoritesActivitiesForUserId(userId);
+    }
 
+    @Override
+    public List<Activity> getActivitiesListForUser(Integer pageNumber, String property, Sort.Direction direction, Integer userId) {
+        List<Activity> activityList = new ArrayList<>();
+          activityList.addAll(getFavoritesActivities(pageNumber,property,direction,userId));
+          activityList.addAll(getNotFavoritesActivities(pageNumber,property,direction,userId));
+      return activityList;
+    }
 }

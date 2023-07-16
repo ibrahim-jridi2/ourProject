@@ -94,4 +94,24 @@ public class ActivityController {
         return activityService.getFavoritesActivities(page, sort, sortDir,userId);
     }
 
+    @GetMapping("/Notfavorites/{userId}")
+    public List<Activity> getNotFavoritesActivities(@RequestParam(value = "page", required = false) Integer page,
+                                                 @RequestParam(value = "sort", required = false) String sort,
+                                                 @RequestParam(value = "dir", required = false) String dir,
+                                                 @PathVariable Integer userId) {
+
+        Sort.Direction sortDir = Sort.Direction.fromString(StringUtils.hasText(dir) ? dir.toUpperCase() : Sort.Direction.ASC.name());
+        return activityService.getNotFavoritesActivities(page, sort, sortDir,userId);
+    }
+
+    @GetMapping("/AllActivities/{userId}")
+    public List<Activity> getActivitiesListForUser(@RequestParam(value = "page", required = false) Integer page,
+                                                    @RequestParam(value = "sort", required = false) String sort,
+                                                    @RequestParam(value = "dir", required = false) String dir,
+                                                    @PathVariable Integer userId) {
+
+        Sort.Direction sortDir = Sort.Direction.fromString(StringUtils.hasText(dir) ? dir.toUpperCase() : Sort.Direction.ASC.name());
+        return activityService.getActivitiesListForUser(page, sort, sortDir,userId);
+    }
+
 }
