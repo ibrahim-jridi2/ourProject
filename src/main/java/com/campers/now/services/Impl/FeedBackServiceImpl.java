@@ -51,5 +51,64 @@ public class FeedBackServiceImpl implements FeedBackService {
             throw new RuntimeException(e);
         }
     }
+    @Override
+    public List<FeedBack> getProductFeedbacks(Integer productId) {
+        return feedbackRepository.findByProductId(productId);
+    }
+
+    @Override
+    public List<FeedBack> getCampingCenterFeedbacks(Integer campingCenterId) {
+        return feedbackRepository.findByCampingCenterId(campingCenterId);
+    }
+
+    @Override
+    public List<FeedBack> getActivityFeedbacks(Integer activityId) {
+        return feedbackRepository.findByActivityId(activityId);
+    }
+
+    @Override
+    public double getRatingByUserId(Integer userId, Integer feedbackId) {
+        FeedBack feedback = feedbackRepository.findById(feedbackId)
+                .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+
+        if (feedback.getUser().getId().equals(userId)) {
+            return feedback.getRating();
+        } else {
+            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Override
+    public double getGeneralRatingByProductId(Integer productId) {
+        List<FeedBack> feedbacks = feedbackRepository.findByProductId(productId);
+        return calculateGeneralRating(feedbacks);
+    }
+
+    @Override
+    public double getGeneralRatingByCampingCenterId(Integer campingCenterId) {
+        List<FeedBack> feedbacks = feedbackRepository.findByCampingCenterId(campingCenterId);
+        return calculateGeneralRating(feedbacks);
+    }
+
+    @Override
+    public double getGeneralRatingByActivityId(Integer activityId) {
+        List<FeedBack> feedbacks = feedbackRepository.findByActivityId(activityId);
+        return calculateGeneralRating(feedbacks);
+    }
+
+    private double calculateGeneralRating(List<FeedBack> feedbacks) {
+        int sum = feedbacks.stream()
+                .mapToInt(FeedBack::getRating)
+                .sum();
+
+        int count = feedbacks.size();
+
+        if (count > 0) {
+            return (double) sum / count;
+        } else {
+            return 0.0;
+        }
+    }
+
 
 }

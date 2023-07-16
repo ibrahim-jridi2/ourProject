@@ -2,6 +2,7 @@ package com.campers.now.services.Impl;
 
 import com.campers.now.models.Post;
 import com.campers.now.repositories.PostRepository;
+import com.campers.now.repositories.UserRepository;
 import com.campers.now.services.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +22,7 @@ public class PostServiceImpl implements PostService {
 
 
     private final PostRepository postRepository;
+    private final UserRepository    userRepository;
 
     public List<Post> getAll(Integer pageNumber, String property, Sort.Direction direction) {
         if (pageNumber == null)
@@ -44,6 +46,15 @@ public class PostServiceImpl implements PostService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Post addPost(Post post, Integer id) {
+       userRepository.findById(id).map(user -> {
+            post.setUser(user);
+            return postRepository.save(post);
+        }).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+        return post;
     }
 
     public Post update(Post post) {

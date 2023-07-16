@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Tag(name = "Activity Management")
@@ -22,9 +23,28 @@ public class ActivityController {
     @PostMapping("")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Activity addActivitybyCampingcenterId(@RequestParam("campingcenterId") Integer campingcenterId, @RequestBody Activity activity) {
+        String currentSeason = getCurrentSeason();
+        if (activity.getSeason().toString()==currentSeason) {
+            activity.setActive(true);
+        } else {
+            activity.setActive(false);
+        }
         return activityService.addActivitybyCampingcenterId(campingcenterId, activity);
     }
+    private String getCurrentSeason() {
+        LocalDate currentDate = LocalDate.now();
+        int month = currentDate.getMonthValue();
 
+        if (month >= 3 && month <= 5) {
+            return "SPRING";
+        } else if (month >= 6 && month <= 8) {
+            return "SUMMER";
+        } else if (month >= 9 && month <= 11) {
+            return "AUTUMN";
+        } else {
+            return "WINTER";
+        }
+    }
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Activity update(@RequestBody Activity activity, @PathVariable("id") Integer id) {
@@ -43,6 +63,16 @@ public class ActivityController {
                             @RequestParam(value = "dir", required = false) String dir) {
 
         Sort.Direction sortDir = Sort.Direction.fromString(StringUtils.hasText(dir) ? dir.toUpperCase() : Sort.Direction.ASC.name());
-        return activityService.getAll(page, sort, sortDir);
+         return activityService.getAll(page, sort, sortDir);
     }
+
+    @GetMapping("/upcoming")
+    public List<Activity> getActiveActivities(@RequestParam(value = "page", required = false) Integer page,
+                                 @RequestParam(value = "sort", required = false) String sort,
+                                 @RequestParam(value = "dir", required = false) String dir) {
+
+        Sort.Direction sortDir = Sort.Direction.fromString(StringUtils.hasText(dir) ? dir.toUpperCase() : Sort.Direction.ASC.name());
+        return activityService.getActiveActivities(page, sort, sortDir);
+    }
+
 }

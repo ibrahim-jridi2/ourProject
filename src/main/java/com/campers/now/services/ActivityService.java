@@ -16,5 +16,7 @@ public interface ActivityService {
 
     Activity update(Activity o);
 
+    public void updateActivityStatus();
 
+    public List<Activity> getActiveActivities(Integer pageNumber, String property, Sort.Direction direction);
 }

@@ -12,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -52,6 +54,24 @@ public class ReservationServiceImpl implements ReservationService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+    @Override
+    public int calculateTotalNumberOfDays(List<Reservation> reservations) {
+        int totalDays = 0;
+
+        for (Reservation reservation : reservations) {
+            if (reservation.isActive()) {
+                Date startDate = reservation.getDateStart();
+                Date endDate = reservation.getDateEnd();
+
+                long differenceInMillis = endDate.getTime() - startDate.getTime();
+                int days = (int) TimeUnit.DAYS.convert(differenceInMillis, TimeUnit.MILLISECONDS);
+
+                totalDays += days;
+            }
+        }
+
+        return totalDays;
     }
 
 }
