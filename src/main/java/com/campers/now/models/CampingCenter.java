@@ -47,6 +47,9 @@ public class CampingCenter implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "campingCenter")
     @JsonIgnore
     private List<FeedBack> feedBacks;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "campingCenter")
+    @JsonIgnore
+    private List<Post> posts;
     /*
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "campingCenter")
     @JsonIgnore

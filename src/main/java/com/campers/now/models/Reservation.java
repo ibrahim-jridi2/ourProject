@@ -11,7 +11,6 @@
     import java.util.Date;
     import java.util.List;
 
-<<<<<<< Updated upstream
 @Entity
 @Getter
 @Setter
@@ -44,36 +43,3 @@ public class Reservation implements Serializable {
     @JsonIgnoreProperties({"campingCenter"})
     private List<Activity> activities;
 }
-=======
-    @Entity
-    @Getter
-    @Setter
-    @ToString
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public class Reservation implements Serializable {
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Integer id;
-        private int numberReserved;
-        private boolean isActive;
-        private boolean isConfirmed;
-        private float totalAmount;
-        @Temporal(TemporalType.DATE)
-        private Date dateStart;
-        @Temporal(TemporalType.DATE)
-        private Date dateEnd;
-        @CreationTimestamp
-        private Instant createdAt;
-        @UpdateTimestamp
-        private Instant modifiedAt;
-        @ManyToOne(fetch = FetchType.EAGER)
-        private User user;
-        @ManyToOne(fetch = FetchType.EAGER)
-        private CampingCenter campingCenter;
-        @ManyToMany(fetch = FetchType.EAGER)
-        @JsonIgnoreProperties({"campingCenter"})
-        private List<Activity> activities;
-    }
->>>>>>> Stashed changes

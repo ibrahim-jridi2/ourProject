@@ -34,5 +34,7 @@ public class Post implements Serializable {
     private Instant modifiedAt;
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private CampingCenter campingCenter;
 
 }
