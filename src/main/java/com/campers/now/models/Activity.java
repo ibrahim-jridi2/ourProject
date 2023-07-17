@@ -35,6 +35,8 @@ public class Activity implements Serializable {
 
     private int capacity;
     private boolean active;
+    private boolean isFavorite;
+
     @CreationTimestamp
     private Instant createdAt;
     @UpdateTimestamp

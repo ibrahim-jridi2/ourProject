@@ -79,7 +79,7 @@ public class ActivityController {
     }
 
 
-   @PostMapping("favorites/{activityId}/{userId}")
+   @PostMapping("addTofavorites/{activityId}/{userId}")
     public ResponseEntity<?> addActivityToUser(@PathVariable Integer activityId, @PathVariable Integer userId) {
         return activityService.addFavorite(userId, activityId);
     }
