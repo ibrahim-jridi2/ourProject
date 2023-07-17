@@ -1,6 +1,9 @@
 package com.campers.now.services.Impl;
 
+import com.campers.now.models.CampingCenter;
 import com.campers.now.models.Post;
+import com.campers.now.models.User;
+import com.campers.now.repositories.CampingCenterRepository;
 import com.campers.now.repositories.PostRepository;
 import com.campers.now.repositories.UserRepository;
 import com.campers.now.services.PostService;
@@ -23,6 +26,7 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final UserRepository    userRepository;
+    private final CampingCenterRepository campingCenterRepository;
 
     public List<Post> getAll(Integer pageNumber, String property, Sort.Direction direction) {
         if (pageNumber == null)
@@ -49,12 +53,20 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post addPost(Post post, Integer id) {
-       userRepository.findById(id).map(user -> {
-            post.setUser(user);
+    public Post addPost(Post post, Integer id,Integer idcamp) {
+    User user = userRepository.findById(id)
+            .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+    post.setUser(user);
+        CampingCenter campingCenter = campingCenterRepository.findById(idcamp)
+                .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+        post.setCampingCenter(campingCenter);
+        try {
             return postRepository.save(post);
-        }).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
-        return post;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
     public Post update(Post post) {
