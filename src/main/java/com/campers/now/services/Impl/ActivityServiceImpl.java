@@ -48,10 +48,10 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
 
     public Activity addActivitybyCampingcenterId(Integer campingcenterId, Activity activity) {
-           CampingCenter campingCenter = campingCenterRepository.findById(campingcenterId).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
-            activity.setCampingCenter(campingCenter);
-            return activityRepository.save(activity);
-        }
+        CampingCenter campingCenter = campingCenterRepository.findById(campingcenterId).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+        activity.setCampingCenter(campingCenter);
+        return activityRepository.save(activity);
+    }
 
 
     @Override
@@ -79,7 +79,6 @@ public class ActivityServiceImpl implements ActivityService {
             activityRepository.save(activity);
         }
     }
-
 
 
     private String getCurrentSeason() {
@@ -112,7 +111,7 @@ public class ActivityServiceImpl implements ActivityService {
         }
     }
 
-        public ResponseEntity<?> addFavorite(Integer activityId, Integer userId) {
+    public ResponseEntity<?> addFavorite(Integer activityId, Integer userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         Optional<Activity> optionalActivity = activityRepository.findById(activityId);
 
@@ -122,7 +121,8 @@ public class ActivityServiceImpl implements ActivityService {
 
             user.getActivities().add(activity);
             userRepository.save(user);
-
+            activity.setFavorite(true);
+            activityRepository.save(activity);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
@@ -132,6 +132,7 @@ public class ActivityServiceImpl implements ActivityService {
     public List<Activity> getFavoritesActivities(Integer pageNumber, String property, Sort.Direction direction, Integer userId) {
         return activityRepository.findActivitiesByUserId(userId);
     }
+
     public List<Activity> getNotFavoritesActivities(Integer pageNumber, String property, Sort.Direction direction, Integer userId) {
         return activityRepository.findNotFavoritesActivitiesForUserId(userId);
     }
@@ -139,10 +140,10 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public List<Activity> getActivitiesListForUser(Integer pageNumber, String property, Sort.Direction direction, Integer userId) {
         List<Activity> activityList = new ArrayList<>();
-        getFavoritesActivities(pageNumber,property,direction,userId).stream().forEach(activity -> activity.setFavorite(true));
-        getNotFavoritesActivities(pageNumber,property,direction,userId).stream().forEach(activity -> activity.setFavorite(false));
-        activityList.addAll(getFavoritesActivities(pageNumber,property,direction,userId));
-          activityList.addAll(getNotFavoritesActivities(pageNumber,property,direction,userId));
-      return activityList;
+        getFavoritesActivities(pageNumber, property, direction, userId).stream().forEach(activity -> activity.setFavorite(true));
+        getNotFavoritesActivities(pageNumber, property, direction, userId).stream().forEach(activity -> activity.setFavorite(false));
+        activityList.addAll(getFavoritesActivities(pageNumber, property, direction, userId));
+        activityList.addAll(getNotFavoritesActivities(pageNumber, property, direction, userId));
+        return activityList;
     }
 }
