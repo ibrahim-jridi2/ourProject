@@ -28,4 +28,6 @@ public interface ActivityService {
 
     public List<Activity> getActivitiesListForUser(Integer pageNumber, String property, Sort.Direction direction, Integer userId);
 
-}
+    public ResponseEntity<?> deleteFromFavorite(Integer activityId, Integer userId);
+
+    }

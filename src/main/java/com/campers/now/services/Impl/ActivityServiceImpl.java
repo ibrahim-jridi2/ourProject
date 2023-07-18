@@ -17,8 +17,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDate;
-import java.time.Month;
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -130,7 +128,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     public List<Activity> getFavoritesActivities(Integer pageNumber, String property, Sort.Direction direction, Integer userId) {
-        return activityRepository.findActivitiesByUserId(userId);
+        return activityRepository.findFavoritesActivitiesByUserId(userId);
     }
 
     public List<Activity> getNotFavoritesActivities(Integer pageNumber, String property, Sort.Direction direction, Integer userId) {
@@ -142,8 +140,33 @@ public class ActivityServiceImpl implements ActivityService {
         List<Activity> activityList = new ArrayList<>();
         getFavoritesActivities(pageNumber, property, direction, userId).stream().forEach(activity -> activity.setFavorite(true));
         getNotFavoritesActivities(pageNumber, property, direction, userId).stream().forEach(activity -> activity.setFavorite(false));
+
+        for (int i=0;i<getNotFavoritesActivities(pageNumber, property, direction, userId).size();i++){
+            if (getFavoritesActivities(pageNumber, property, direction, userId).contains(getNotFavoritesActivities(pageNumber, property, direction, userId).get(i).getId())){
+                getNotFavoritesActivities(pageNumber, property, direction, userId).remove(getNotFavoritesActivities(pageNumber, property, direction, userId).get(i));
+            }
+        }
         activityList.addAll(getFavoritesActivities(pageNumber, property, direction, userId));
         activityList.addAll(getNotFavoritesActivities(pageNumber, property, direction, userId));
         return activityList;
     }
+
+    public ResponseEntity<?> deleteFromFavorite(Integer activityId, Integer userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        Optional<Activity> optionalActivity = activityRepository.findById(activityId);
+
+        if (optionalUser.isPresent() && optionalActivity.isPresent()) {
+            User user = optionalUser.get();
+            Activity activity = optionalActivity.get();
+
+            user.getActivities().remove(activity);
+            userRepository.save(user);
+            activity.setFavorite(false);
+            activityRepository.save(activity);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

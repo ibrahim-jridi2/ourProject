@@ -81,7 +81,7 @@ public class ActivityController {
 
    @PostMapping("addTofavorites/{activityId}/{userId}")
     public ResponseEntity<?> addActivityToUser(@PathVariable Integer activityId, @PathVariable Integer userId) {
-        return activityService.addFavorite(userId, activityId);
+        return activityService.addFavorite(activityId, userId);
     }
 
   @GetMapping("/favorites/{userId}")
@@ -113,5 +113,11 @@ public class ActivityController {
         Sort.Direction sortDir = Sort.Direction.fromString(StringUtils.hasText(dir) ? dir.toUpperCase() : Sort.Direction.ASC.name());
         return activityService.getActivitiesListForUser(page, sort, sortDir,userId);
     }
+
+    @PostMapping("deleteFromfavorites/{activityId}/{userId}")
+    public ResponseEntity<?> deleteFromFavorites(@PathVariable Integer activityId, @PathVariable Integer userId) {
+        return activityService.deleteFromFavorite(activityId, userId);
+    }
+
 
 }
