@@ -21,12 +21,12 @@ public class CommentController {
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_CAMPER')")
-    public Comment add(@RequestBody Comment comment) {
+    public Comment add(@RequestBody Comment comment ) {
         return commentService.add(comment);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_CAMPER')")
+
     public Comment update(@RequestBody Comment comment, @PathVariable("id") Integer id) {
         comment.setId(id);
         return commentService.update(comment);

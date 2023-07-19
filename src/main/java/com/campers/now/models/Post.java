@@ -25,8 +25,6 @@ public class Post implements Serializable {
     private String details;
     @ElementCollection
     private List<String> tags;
-    private int likes;
-    private int dislikes;
     private boolean isActive;
     @CreationTimestamp
     private Instant createdAt;
@@ -34,7 +32,5 @@ public class Post implements Serializable {
     private Instant modifiedAt;
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
-    @ManyToOne(fetch = FetchType.EAGER)
-    private CampingCenter campingCenter;
 
 }
