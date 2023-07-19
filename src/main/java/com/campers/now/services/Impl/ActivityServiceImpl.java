@@ -169,4 +169,9 @@ public class ActivityServiceImpl implements ActivityService {
         }
     }
 
+
+    public List<CampingCenter> getCampingsList(Integer pageNumber, String property, Sort.Direction direction, Integer actId) {
+        return activityRepository.findCampingCentersByActId(actId);
+    }
+
 }

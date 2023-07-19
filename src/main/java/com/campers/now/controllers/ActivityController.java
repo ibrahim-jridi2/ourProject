@@ -1,6 +1,7 @@
 package com.campers.now.controllers;
 
 import com.campers.now.models.Activity;
+import com.campers.now.models.CampingCenter;
 import com.campers.now.services.ActivityService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -118,6 +119,18 @@ public class ActivityController {
     public ResponseEntity<?> deleteFromFavorites(@PathVariable Integer activityId, @PathVariable Integer userId) {
         return activityService.deleteFromFavorite(activityId, userId);
     }
+
+
+    @GetMapping("/campsByActivity/{actId}")
+    public List<CampingCenter> getCampingCentersByActId(@RequestParam(value = "page", required = false) Integer page,
+                                                        @RequestParam(value = "sort", required = false) String sort,
+                                                        @RequestParam(value = "dir", required = false) String dir,
+                                                        @PathVariable Integer actId) {
+
+        Sort.Direction sortDir = Sort.Direction.fromString(StringUtils.hasText(dir) ? dir.toUpperCase() : Sort.Direction.ASC.name());
+        return activityService.getCampingsList(page, sort, sortDir,actId);
+    }
+
 
 
 }

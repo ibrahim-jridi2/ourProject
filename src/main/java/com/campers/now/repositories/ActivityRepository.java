@@ -1,6 +1,7 @@
 package com.campers.now.repositories;
 
 import com.campers.now.models.Activity;
+import com.campers.now.models.CampingCenter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,5 +22,9 @@ public interface ActivityRepository extends JpaRepository<Activity, Integer> {
 
     @Query("SELECT DISTINCT a FROM Activity a WHERE NOT EXISTS (SELECT u FROM a.users u WHERE u.id = :userId) AND a.active = true")
     List<Activity> findNotFavoritesActivitiesForUserId(@Param("userId") Integer userId);
+
+
+    @Query("SELECT  c FROM CampingCenter c WHERE c.id = (SELECT a.campingCenter.id FROM  Activity a WHERE a.id = :actId) ")
+    List<CampingCenter> findCampingCentersByActId(@Param("actId") Integer actId);
 
 }

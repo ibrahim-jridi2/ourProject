@@ -1,6 +1,7 @@
 package com.campers.now.services;
 
 import com.campers.now.models.Activity;
+import com.campers.now.models.CampingCenter;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 
@@ -30,4 +31,6 @@ public interface ActivityService {
 
     public ResponseEntity<?> deleteFromFavorite(Integer activityId, Integer userId);
 
-    }
+    public List<CampingCenter> getCampingsList(Integer pageNumber, String property, Sort.Direction direction, Integer actId);
+
+}
