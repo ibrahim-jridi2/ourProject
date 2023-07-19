@@ -2,21 +2,24 @@ package com.campers.now.services.Impl;
 
 import com.campers.now.models.Activity;
 import com.campers.now.models.CampingCenter;
+import com.campers.now.models.User;
 import com.campers.now.repositories.ActivityRepository;
 import com.campers.now.repositories.CampingCenterRepository;
+import com.campers.now.repositories.UserRepository;
 import com.campers.now.services.ActivityService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDate;
-import java.time.Month;
-import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -25,6 +28,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     ActivityRepository activityRepository;
     CampingCenterRepository campingCenterRepository;
+    UserRepository userRepository;
 
     @Override
     public List<Activity> getAll(Integer pageNumber, String property, Sort.Direction direction) {
@@ -42,10 +46,10 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
 
     public Activity addActivitybyCampingcenterId(Integer campingcenterId, Activity activity) {
-           CampingCenter campingCenter = campingCenterRepository.findById(campingcenterId).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
-            activity.setCampingCenter(campingCenter);
-            return activityRepository.save(activity);
-        }
+        CampingCenter campingCenter = campingCenterRepository.findById(campingcenterId).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+        activity.setCampingCenter(campingCenter);
+        return activityRepository.save(activity);
+    }
 
 
     @Override
@@ -75,7 +79,6 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
 
-
     private String getCurrentSeason() {
         LocalDate currentDate = LocalDate.now();
         int month = currentDate.getMonthValue();
@@ -91,8 +94,6 @@ public class ActivityServiceImpl implements ActivityService {
         }
     }
 
-
-
     public List<Activity> getActiveActivities(Integer pageNumber, String property, Sort.Direction direction) {
         if (pageNumber == null) {
             return activityRepository.findByActiveTrue();
@@ -107,4 +108,65 @@ public class ActivityServiceImpl implements ActivityService {
                     .collect(Collectors.toUnmodifiableList());
         }
     }
+
+    public ResponseEntity<?> addFavorite(Integer activityId, Integer userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        Optional<Activity> optionalActivity = activityRepository.findById(activityId);
+
+        if (optionalUser.isPresent() && optionalActivity.isPresent()) {
+            User user = optionalUser.get();
+            Activity activity = optionalActivity.get();
+
+            user.getActivities().add(activity);
+            userRepository.save(user);
+            activity.setFavorite(true);
+            activityRepository.save(activity);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    public List<Activity> getFavoritesActivities(Integer pageNumber, String property, Sort.Direction direction, Integer userId) {
+        return activityRepository.findFavoritesActivitiesByUserId(userId);
+    }
+
+    public List<Activity> getNotFavoritesActivities(Integer pageNumber, String property, Sort.Direction direction, Integer userId) {
+        return activityRepository.findNotFavoritesActivitiesForUserId(userId);
+    }
+
+    @Override
+    public List<Activity> getActivitiesListForUser(Integer pageNumber, String property, Sort.Direction direction, Integer userId) {
+        List<Activity> activityList = new ArrayList<>();
+        getFavoritesActivities(pageNumber, property, direction, userId).stream().forEach(activity -> activity.setFavorite(true));
+        getNotFavoritesActivities(pageNumber, property, direction, userId).stream().forEach(activity -> activity.setFavorite(false));
+
+        for (int i=0;i<getNotFavoritesActivities(pageNumber, property, direction, userId).size();i++){
+            if (getFavoritesActivities(pageNumber, property, direction, userId).contains(getNotFavoritesActivities(pageNumber, property, direction, userId).get(i).getId())){
+                getNotFavoritesActivities(pageNumber, property, direction, userId).remove(getNotFavoritesActivities(pageNumber, property, direction, userId).get(i));
+            }
+        }
+        activityList.addAll(getFavoritesActivities(pageNumber, property, direction, userId));
+        activityList.addAll(getNotFavoritesActivities(pageNumber, property, direction, userId));
+        return activityList;
+    }
+
+    public ResponseEntity<?> deleteFromFavorite(Integer activityId, Integer userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        Optional<Activity> optionalActivity = activityRepository.findById(activityId);
+
+        if (optionalUser.isPresent() && optionalActivity.isPresent()) {
+            User user = optionalUser.get();
+            Activity activity = optionalActivity.get();
+
+            user.getActivities().remove(activity);
+            userRepository.save(user);
+            activity.setFavorite(false);
+            activityRepository.save(activity);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
