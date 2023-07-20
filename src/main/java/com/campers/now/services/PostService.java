@@ -11,7 +11,9 @@ public interface PostService {
     Post getById(Integer id);
 
     Post add(Post o);
+
     Post addPost(Post post, Integer id);
+
     Post update(Post o);
     List<Post> getPostsByUserMostComments(Integer id, int limit);
 }

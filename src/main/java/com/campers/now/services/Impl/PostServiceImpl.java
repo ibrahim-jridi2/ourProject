@@ -57,6 +57,7 @@ public class PostServiceImpl implements PostService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
         post.setUser(user);
+
         try {
             return postRepository.save(post);
         } catch (Exception e) {

@@ -23,7 +23,7 @@ public class CommentServiceImpl implements CommentService {
 
     public List<Comment> getAll(Integer pageNumber, String property, Sort.Direction direction) {
         if (pageNumber == null)
-            return commentRepository.findAll();
+                return commentRepository.findAll();
         return commentRepository.findAll(
                 PageRequest.of((pageNumber <= 0 ? 1 : pageNumber) - 1, 10, Sort.by(
                         List.of(Sort.Order.by(StringUtils.hasText(property) ? property : "id").with(direction)))
