@@ -4,7 +4,6 @@ import com.campers.now.models.Product;
 import com.campers.now.services.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,13 +17,13 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+
     public Product add(@RequestBody Product product) {
         return productService.add(product);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+
     public Product update(@PathVariable("id") Integer id, @RequestBody Product updatedProduct) {
         return productService.update(id, updatedProduct);
     }

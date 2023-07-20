@@ -27,7 +27,7 @@ public class ProductCommand implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private int quantity;
-    private float priceTotal;
+    private long priceTotal;
     @CreationTimestamp
     private Instant createdAt;
     @UpdateTimestamp

@@ -44,14 +44,12 @@ public class CommandServiceImpl implements CommandService {
         Optional<Command> optionalCommand = commandRepository.findById(id);
         if (optionalCommand.isPresent()) {
             Command existingCommand = optionalCommand.get();
-            existingCommand.setMatricule(command.getMatricule());
             existingCommand.setConfirmed(command.isConfirmed());
-            existingCommand.setCustomerName(command.getCustomerName());
+            existingCommand.setCustomerFirstName(command.getCustomerFirstName());
+            existingCommand.setCustomerLastName(command.getCustomerLastName());
+            existingCommand.setPhoneNumber(command.getPhoneNumber());
             existingCommand.setCustomerEmail(command.getCustomerEmail());
             existingCommand.setShippingAddress(command.getShippingAddress());
-            existingCommand.setCommandStatus(command.getCommandStatus());
-            existingCommand.setPaymentMethod(command.getPaymentMethod());
-            existingCommand.setBuyer(command.getBuyer());
             return commandRepository.save(existingCommand);
         }
         return null;
