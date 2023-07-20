@@ -1,7 +1,7 @@
 package com.campers.now.controllers;
 
 import com.campers.now.models.Activity;
-import com.campers.now.schedulers.ActivityScheduler;
+
 import com.campers.now.services.ActivityService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 public class ActivityController {
     ActivityService activityService;
-    ActivityScheduler activityScheduler;
+    //ActivityScheduler activityScheduler;
 
     @PostMapping("")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
