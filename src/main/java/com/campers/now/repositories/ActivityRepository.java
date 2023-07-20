@@ -27,4 +27,5 @@ public interface ActivityRepository extends JpaRepository<Activity, Integer> {
     @Query("SELECT  c FROM CampingCenter c WHERE c.id = (SELECT a.campingCenter.id FROM  Activity a WHERE a.id = :actId) ")
     List<CampingCenter> findCampingCentersByActId(@Param("actId") Integer actId);
 
+
 }
