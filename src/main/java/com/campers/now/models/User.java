@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,12 +30,16 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @NotNull
     private String nom;
+    @NotNull
     private String prenom;
     @Column(unique = true)
+    @NotNull
     private String email;
     @JsonIgnore
     private String password;
+    private String avatar;
     private boolean isEmailValide;
     private boolean isActive;
     private boolean tokenExpired;
@@ -71,6 +76,17 @@ public class User implements UserDetails {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     @JsonIgnore
     private List<Reclamation> reclamations;
+
+/*    @ManyToMany
+    @JoinTable(
+            name = "favorite_activities",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "activity_id"))
+    private List<Activity> activities;*/
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JsonIgnore
+    private List<Activity> activities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -39,11 +39,8 @@ public class ReservationController {
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public List<Reservation> getAll(@RequestParam(value = "page", required = false) Integer page,
-                            @RequestParam(value = "sort", required = false) String sort,
-                            @RequestParam(value = "dir", required = false) String dir) {
+    public List<Reservation> getAll() {
 
-        Sort.Direction sortDir = Sort.Direction.fromString(StringUtils.hasText(dir) ? dir.toUpperCase() : Sort.Direction.ASC.name());
-        return reservationService.getAll(page, sort, sortDir);
+        return reservationService.getAll();
     }
 }

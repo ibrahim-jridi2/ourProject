@@ -6,11 +6,13 @@ import org.springframework.data.domain.Sort;
 import java.util.List;
 
 public interface ReservationService {
-    List<Reservation> getAll(Integer pageNumber, String property, Sort.Direction direction);
+    List<Reservation> getAll();
 
     Reservation getById(Integer id);
 
     Reservation add(Reservation o);
 
     Reservation update(Reservation o);
-}
+     int calculateTotalNumberOfDays(List<Reservation> reservations) ;
+
+    }

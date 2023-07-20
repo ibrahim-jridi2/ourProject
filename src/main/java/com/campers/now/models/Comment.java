@@ -20,8 +20,7 @@ public class Comment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String details;
-    private int likes;
-    private int dislikes;
+    private int rating;
     private boolean isActive;
     @CreationTimestamp
     private Instant createdAt;

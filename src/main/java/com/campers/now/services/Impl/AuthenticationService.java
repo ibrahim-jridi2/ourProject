@@ -13,6 +13,7 @@ import com.campers.now.models.enums.RoleType;
 import com.campers.now.repositories.RoleRepository;
 import com.campers.now.services.UserService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -25,6 +26,7 @@ import java.util.List;
 @AllArgsConstructor
 @Service
 @Transactional
+@Slf4j
 public class AuthenticationService {
     private final UserService userService;
     private final JwtService jwtService;
@@ -41,11 +43,9 @@ public class AuthenticationService {
                     )
             );
         } catch (AuthenticationException e) {
-            throw new BadRequestHttpException("Invalid credentials");
+            throw new BadRequestHttpException(e.getMessage());
         }
         var user = userService.getByEmail(request.getEmail());
-        if (!user.isActive())
-            throw new UnAuthorizedHttpException("Your account is no longer active, contact administrator");
         HashMap<String, Object> credentials = initializeCreds(user);
         var jwtToken = jwtService.generateToken(credentials, user);
         return AuthenticationResponse.builder()

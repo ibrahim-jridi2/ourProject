@@ -1,7 +1,6 @@
 package com.campers.now.models;
 
 import com.campers.now.models.enums.Season;
-import com.campers.now.models.enums.VendingType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -10,7 +9,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -34,6 +35,8 @@ public class Activity implements Serializable {
 
     private int capacity;
     private boolean active;
+    private boolean isFavorite;
+
     @CreationTimestamp
     private Instant createdAt;
     @UpdateTimestamp
@@ -51,4 +54,9 @@ public class Activity implements Serializable {
     /*@OneToMany(cascade = CascadeType.ALL, mappedBy = "activity")
     @JsonIgnore
     private List<Reclamation> reclamations;*/
+
+
+    @ManyToMany(mappedBy = "activities",cascade = CascadeType.REMOVE)
+    private List<User> users;
+
 }

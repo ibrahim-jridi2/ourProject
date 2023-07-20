@@ -49,10 +49,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .id(o.getId())
                 .nom(o.getNom())
                 .prenom(o.getPrenom())
+                .avatar(o.getAvatar())
                 .email(o.getEmail())
-                .isEmailValide(false)
-                .isActive(true)
-                .tokenExpired(false)
+                .isEmailValide(o.isEmailValide())
+                .isActive(o.isActive())
+                .tokenExpired(o.isTokenExpired())
                 .password(o.getPassword())
                 .roles(o.getRoles())
                 .build();
@@ -93,6 +94,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         try {
             o.setPassword(new BCryptPasswordEncoder().encode(o.getPassword()));
+            o.setActive(true);
+            o.setEmailValide(false);
+            o.setTokenExpired(false);
             var user = buildUser(o);
             return userRepository.save(user);
         } catch (Exception e) {
@@ -127,7 +131,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional
     public User getByEmail(String email) {
         var user = userRepository.findByEmail(email).orElseThrow(
-                () -> new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invalid credentials"));
+                () -> new BadRequestHttpException("Bad credentials"));
         var pass = userRepository.getPasswordByEmail(email);
         user.setPassword(pass);
         return user;
@@ -138,11 +142,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = getByEmail(username);
         if (user != null) {
-            return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.isActive()
+            if (!user.isActive())
+                throw new UnAuthorizedHttpException("Your account is no longer active, contact administrator");
+            return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), true
                     , true, true,
                     true, getAuthorities(user.getRoles()));
         }
-        throw new UsernameNotFoundException("User not found");
+        throw new BadRequestHttpException("Bad credentials");
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities(List<Role> roles) {
