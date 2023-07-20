@@ -5,6 +5,7 @@ import com.campers.now.services.PostService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +30,7 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    /*@PreAuthorize("hasRole('ROLE_CAMPER')")*/
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Post update(@RequestBody Post post, @PathVariable("id") Integer id) {
         post.setId(id);
         return postService.update(post);
@@ -46,6 +47,10 @@ public class PostController {
                              @RequestParam(value = "dir", required = false) String dir) {
         Sort.Direction sortDir = Sort.Direction.fromString(StringUtils.hasText(dir) ? dir.toUpperCase() : Sort.Direction.ASC.name());
         return postService.getAll(page, sort, sortDir);
+    }
+    @GetMapping("/most-comments/{id}")
+    public List<Post> getPostseason(@PathVariable("id") Integer id, @RequestParam("limit") int limit) {
+        return postService.getPostsByUserMostComments(id, limit);
     }
 
 }

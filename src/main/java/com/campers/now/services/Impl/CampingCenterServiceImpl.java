@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -100,7 +99,7 @@ public class CampingCenterServiceImpl implements CampingCenterService {
         return new double[] { unoccupiedSpacesPercent, occupancyRatePercent };
     }
 
-    //Average Daily Rate
+    //Average  Rate
  @Override
  public double[] calculateADR() {
      List<CampingCenter> campingCenters = campingCenterRepository.findAll();
@@ -139,7 +138,7 @@ public class CampingCenterServiceImpl implements CampingCenterService {
          for (int i = 0; i < 12; i++) {
              if (totalNumberOfDaysByMonth[i] != 0 && totalOccupiedUnitsByMonth[i] != 0) {
                  double adr = totalRevenueByMonth[i] / totalOccupiedUnitsByMonth[i] / totalNumberOfDaysByMonth[i];
-                 adrValues[i] = roundToTwoDecimalPlaces(adr);
+                 adrValues[i] = adr;
              }
          }
      }
@@ -153,9 +152,26 @@ public class CampingCenterServiceImpl implements CampingCenterService {
         long diffMillis = endMillis - startMillis;
         return (int) TimeUnit.DAYS.convert(diffMillis, TimeUnit.MILLISECONDS) + 1;
     }
-    private double roundToTwoDecimalPlaces(double value) {
-        DecimalFormat df = new DecimalFormat("#.##");
-        return Double.parseDouble(df.format(value));
+    public double calculateRevenuePerOccupiedSpace() {
+        List<Reservation> reservations = reserv.getAll(null,null ,null);
+        double totalRevenue = 0;
+        int totalOccupiedSpaces = 0;
+
+        for (Reservation reservation : reservations) {
+            if (reservation.isActive() && reservation.getDateEnd().after(new Date())) {
+
+                totalRevenue += reservation.getTotalAmount();
+                int campingPeriodInDays = calculateNumberOfDays(reservation.getDateStart(), reservation.getDateEnd());
+                totalOccupiedSpaces += reservation.getNumberReserved() * campingPeriodInDays;
+
+
+
+            }
+        }
+
+        double revenuePerOccupiedSpace = totalRevenue / totalOccupiedSpaces;
+        return revenuePerOccupiedSpace;
     }
+
 
 }

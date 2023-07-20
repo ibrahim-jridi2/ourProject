@@ -25,8 +25,6 @@ public class Post implements Serializable {
     private String details;
     @ElementCollection
     private List<String> tags;
-    private int likes;
-    private int dislikes;
     private boolean isActive;
     @CreationTimestamp
     private Instant createdAt;
