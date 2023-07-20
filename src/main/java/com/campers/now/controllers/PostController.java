@@ -24,9 +24,9 @@ public class PostController {
     public Post add(@RequestBody Post post) {
         return postService.add(post);
     }
-    @PostMapping("/{id}/{idcampingcenter}")
-    public Post addPost(@RequestBody Post post, @PathVariable("id") Integer id,@PathVariable("idcampingcenter") Integer idcampingcenter) {
-        return postService.addPost(post, id,idcampingcenter);
+    @PostMapping("/{id}")
+    public Post addPost(@RequestBody Post post, @PathVariable("id") Integer id) {
+        return postService.addPost(post, id);
     }
 
     @PutMapping("/{id}")
@@ -47,6 +47,10 @@ public class PostController {
                              @RequestParam(value = "dir", required = false) String dir) {
         Sort.Direction sortDir = Sort.Direction.fromString(StringUtils.hasText(dir) ? dir.toUpperCase() : Sort.Direction.ASC.name());
         return postService.getAll(page, sort, sortDir);
+    }
+    @GetMapping("/most-comments/{id}")
+    public List<Post> getPostseason(@PathVariable("id") Integer id, @RequestParam("limit") int limit) {
+        return postService.getPostsByUserMostComments(id, limit);
     }
 
 }

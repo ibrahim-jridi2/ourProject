@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @Service
 public class CommentServiceImpl implements CommentService {
 
-
     private final CommentRepository commentRepository;
 
     public List<Comment> getAll(Integer pageNumber, String property, Sort.Direction direction) {
@@ -42,13 +41,12 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.findByPostId(id);
     }
 
+    @Override
     @Transactional
     public Comment add(Comment comment) {
-        try {
-            return commentRepository.save(comment);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
+        return commentRepository.save(comment);
+
     }
 
     public Comment update(Comment comment) {
