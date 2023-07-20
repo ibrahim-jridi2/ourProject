@@ -99,7 +99,7 @@ public class CampingCenterServiceImpl implements CampingCenterService {
         return new double[] { unoccupiedSpacesPercent, occupancyRatePercent };
     }
 
-    //Average Daily Rate
+    //Average  Rate
  @Override
  public double[] calculateADR() {
      List<CampingCenter> campingCenters = campingCenterRepository.findAll();
@@ -151,6 +151,26 @@ public class CampingCenterServiceImpl implements CampingCenterService {
         long endMillis = endDate.getTime();
         long diffMillis = endMillis - startMillis;
         return (int) TimeUnit.DAYS.convert(diffMillis, TimeUnit.MILLISECONDS) + 1;
+    }
+    public double calculateRevenuePerOccupiedSpace() {
+        List<Reservation> reservations = reserv.getAll(null,null ,null);
+        double totalRevenue = 0;
+        int totalOccupiedSpaces = 0;
+
+        for (Reservation reservation : reservations) {
+            if (reservation.isActive() && reservation.getDateEnd().after(new Date())) {
+
+                totalRevenue += reservation.getTotalAmount();
+                int campingPeriodInDays = calculateNumberOfDays(reservation.getDateStart(), reservation.getDateEnd());
+                totalOccupiedSpaces += reservation.getNumberReserved() * campingPeriodInDays;
+
+
+
+            }
+        }
+
+        double revenuePerOccupiedSpace = totalRevenue / totalOccupiedSpaces;
+        return revenuePerOccupiedSpace;
     }
 
 
