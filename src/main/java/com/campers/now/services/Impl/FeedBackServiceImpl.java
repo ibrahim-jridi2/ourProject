@@ -4,6 +4,7 @@ import com.campers.now.models.FeedBack;
 import com.campers.now.repositories.FeedBackRepository;
 import com.campers.now.services.FeedBackService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
+@Slf4j
 public class FeedBackServiceImpl implements FeedBackService {
     FeedBackRepository feedbackRepository;
 
@@ -36,8 +38,21 @@ public class FeedBackServiceImpl implements FeedBackService {
     @Override
     public FeedBack add(FeedBack o) {
         try {
+            // If the campingCenter, product, or activity are not provided in the JSON body,
+            // set them to null by default.
+            if (o.getCampingCenter() == null) {
+                o.setCampingCenter(null);
+            }
+            if (o.getProduct() == null) {
+                o.setProduct(null);
+            }
+            if (o.getActivity() == null) {
+                o.setActivity(null);
+            }
+
             return feedbackRepository.save(o);
         } catch (Exception e) {
+            log.debug(e.getMessage());
             throw new RuntimeException(e);
         }
     }

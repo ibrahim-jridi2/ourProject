@@ -21,7 +21,6 @@ public class FeedBackController {
     private final FeedBackService feedBackService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_CAMPER')")
     public FeedBack add(@RequestBody @Valid FeedBack feedBack) {
         return feedBackService.add(feedBack);
     }
