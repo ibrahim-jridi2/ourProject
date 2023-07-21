@@ -1,14 +1,15 @@
 package com.campers.now.services.Impl;
 
+import com.campers.now.DTO.UserRequest;
 import com.campers.now.config.JwtService;
 import com.campers.now.exceptions.BadRequestHttpException;
 import com.campers.now.exceptions.NotFoundHttpException;
 import com.campers.now.exceptions.UnAuthorizedHttpException;
 import com.campers.now.models.Role;
 import com.campers.now.models.User;
-import com.campers.now.DTO.UserRequest;
 import com.campers.now.models.enums.RoleType;
 import com.campers.now.repositories.UserRepository;
+import com.campers.now.repositories.ViewRepository;
 import com.campers.now.services.UserService;
 import io.jsonwebtoken.Claims;
 import lombok.AllArgsConstructor;
@@ -38,6 +39,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
     UserRepository userRepository;
+    ViewRepository viewRepository;
 
     private static User buildUser(UserRequest o) {
         return User.builder()
@@ -140,6 +142,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public List<Map<String, Object>> getRevenueByUserIdAndSeason(Integer userId) {
         return userRepository.getRevenueByUserIdAndSeason(userId);
+    }
+
+    @Override
+    public List<Map<String, Object>> getRecentlyViewedCampingCenters(Integer userID) {
+        return viewRepository.getRecentlyViewedCampingCenters(userID);
+    }
+
+    @Override
+    public List<Map<String, Object>> getRecentlyViewedPosts(Integer userID) {
+        return viewRepository.getRecentlyViewedPosts(userID);
+    }
+
+    @Override
+    public List<Map<String, Object>> getSuggestedPosts(List<String> tags) {
+        return viewRepository.getSuggestedPosts(tags);
     }
 
     @Override
