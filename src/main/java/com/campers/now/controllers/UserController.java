@@ -3,7 +3,7 @@ package com.campers.now.controllers;
 import com.campers.now.models.Role;
 import com.campers.now.models.User;
 import com.campers.now.repositories.RoleRepository;
-import com.campers.now.utils.UserRequest;
+import com.campers.now.DTO.UserRequest;
 import com.campers.now.services.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -14,12 +14,13 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Tag(name = "User Management")
 @RestController
 @AllArgsConstructor
 @RequestMapping("users")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin
 public class UserController {
     private final UserService userService;
     private final RoleRepository roleRepository;
@@ -32,6 +33,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_CAMPER')")
     public User update(@RequestBody UserRequest user, @PathVariable("id") Integer id) {
         user.setId(id);
         return userService.update(user);
@@ -41,6 +43,18 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_CAMPER')")
     public User getOne(@PathVariable("id") Integer id) {
         return userService.getById(id);
+    }
+
+    @Secured("ROLE_SUPER_ADMIN")
+    @GetMapping("/revenue-by-season/{id}")
+    public List<Map<String, Object>>  getRevenueBySeason(@PathVariable("id") Integer id) {
+        return userService.getRevenueByUserIdAndSeason(id);
+    }
+
+    @Secured("ROLE_SUPER_ADMIN")
+    @GetMapping("/revenue-by-date/{id}")
+    public List<Map<String, Object>> getRevenueByDate(@PathVariable("id") Integer id) {
+        return userService.getRevenueByUserIdForEveryYearAndMonth(id);
     }
 
     @GetMapping
