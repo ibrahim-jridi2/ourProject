@@ -1,7 +1,7 @@
 package com.campers.now.services;
 
 import com.campers.now.models.Reservation;
-import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -14,5 +14,5 @@ public interface ReservationService {
 
     Reservation update(Reservation o);
      int calculateTotalNumberOfDays(List<Reservation> reservations) ;
-
+    ResponseEntity<List<Object[]>> getReservationStatisticsByMonth();
     }

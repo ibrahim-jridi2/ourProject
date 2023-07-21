@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -18,4 +17,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     @Modifying
     @Query("UPDATE Reservation r SET r.isActive = false WHERE r.dateEnd < :today AND r.isActive = true")
     void deactivateOldReservations(Date today);
+
+    @Query(value = "SELECT MONTH(dateStart) as month, COUNT(*) as count FROM Reservation GROUP BY MONTH(dateStart)")
+    List<Object[]> getReservationCountByMonth();
 }
