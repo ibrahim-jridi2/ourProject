@@ -1,13 +1,13 @@
 package com.campers.now.services.Impl;
 
 import com.campers.now.models.Reservation;
-import com.campers.now.models.User;
 import com.campers.now.repositories.ReservationRepository;
 import com.campers.now.repositories.UserRepository;
 import com.campers.now.services.ReservationService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-
 import java.util.concurrent.TimeUnit;
 
 @AllArgsConstructor
@@ -85,6 +84,9 @@ public class ReservationServiceImpl implements ReservationService {
         reservationRepository.deactivateOldReservations(dateToday);
     }
 
-
+    public ResponseEntity<List<Object[]>> getReservationStatisticsByMonth() {
+        List<Object[]> statistics = reservationRepository.getReservationCountByMonth();
+        return ResponseEntity.ok(statistics);
+    }
 
 }
