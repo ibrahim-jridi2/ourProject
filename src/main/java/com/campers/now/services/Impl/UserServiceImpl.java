@@ -1,21 +1,21 @@
 package com.campers.now.services.Impl;
 
+import com.campers.now.DTO.UserRequest;
 import com.campers.now.config.JwtService;
 import com.campers.now.exceptions.BadRequestHttpException;
 import com.campers.now.exceptions.NotFoundHttpException;
 import com.campers.now.exceptions.UnAuthorizedHttpException;
 import com.campers.now.models.Role;
 import com.campers.now.models.User;
-import com.campers.now.utils.UserRequest;
 import com.campers.now.models.enums.RoleType;
 import com.campers.now.repositories.UserRepository;
+import com.campers.now.repositories.ViewRepository;
 import com.campers.now.services.UserService;
 import io.jsonwebtoken.Claims;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,15 +26,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -43,6 +39,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
     UserRepository userRepository;
+    ViewRepository viewRepository;
 
     private static User buildUser(UserRequest o) {
         return User.builder()
@@ -135,6 +132,31 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         var pass = userRepository.getPasswordByEmail(email);
         user.setPassword(pass);
         return user;
+    }
+
+    @Override
+    public List<Map<String, Object>> getRevenueByUserIdForEveryYearAndMonth(Integer userId) {
+        return userRepository.getRevenueByUserIdForEveryYearAndMonth(userId);
+    }
+
+    @Override
+    public List<Map<String, Object>> getRevenueByUserIdAndSeason(Integer userId) {
+        return userRepository.getRevenueByUserIdAndSeason(userId);
+    }
+
+    @Override
+    public List<Map<String, Object>> getRecentlyViewedCampingCenters(Integer userID) {
+        return viewRepository.getRecentlyViewedCampingCenters(userID);
+    }
+
+    @Override
+    public List<Map<String, Object>> getRecentlyViewedPosts(Integer userID) {
+        return viewRepository.getRecentlyViewedPosts(userID);
+    }
+
+    @Override
+    public List<Map<String, Object>> getSuggestedPosts(List<String> tags) {
+        return viewRepository.getSuggestedPosts(tags);
     }
 
     @Override

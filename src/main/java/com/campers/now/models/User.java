@@ -43,6 +43,7 @@ public class User implements UserDetails {
     private boolean isEmailValide;
     private boolean isActive;
     private boolean tokenExpired;
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @CreationTimestamp
     private Instant createdAt;
     @UpdateTimestamp

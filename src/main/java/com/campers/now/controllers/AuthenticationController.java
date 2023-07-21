@@ -1,8 +1,8 @@
 package com.campers.now.controllers;
 
-import com.campers.now.utils.AuthenticationResponse;
-import com.campers.now.utils.LoginRequest;
-import com.campers.now.utils.RegisterRequest;
+import com.campers.now.DTO.AuthenticationResponse;
+import com.campers.now.DTO.LoginRequest;
+import com.campers.now.DTO.RegisterRequest;
 import com.campers.now.services.Impl.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

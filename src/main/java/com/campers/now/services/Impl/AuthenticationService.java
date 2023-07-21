@@ -1,14 +1,13 @@
 package com.campers.now.services.Impl;
 
 import com.campers.now.models.User;
-import com.campers.now.utils.AuthenticationResponse;
-import com.campers.now.utils.LoginRequest;
-import com.campers.now.utils.RegisterRequest;
+import com.campers.now.DTO.AuthenticationResponse;
+import com.campers.now.DTO.LoginRequest;
+import com.campers.now.DTO.RegisterRequest;
 import com.campers.now.config.JwtService;
 import com.campers.now.exceptions.BadRequestHttpException;
-import com.campers.now.exceptions.UnAuthorizedHttpException;
 import com.campers.now.models.Role;
-import com.campers.now.utils.UserRequest;
+import com.campers.now.DTO.UserRequest;
 import com.campers.now.models.enums.RoleType;
 import com.campers.now.repositories.RoleRepository;
 import com.campers.now.services.UserService;

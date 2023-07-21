@@ -1,4 +1,4 @@
-package com.campers.now.utils;
+package com.campers.now.DTO;
 
 
 import com.campers.now.models.User;
