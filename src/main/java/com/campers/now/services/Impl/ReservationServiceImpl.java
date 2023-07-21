@@ -88,5 +88,4 @@ public class ReservationServiceImpl implements ReservationService {
         List<Object[]> statistics = reservationRepository.getReservationCountByMonth();
         return ResponseEntity.ok(statistics);
     }
-
 }
