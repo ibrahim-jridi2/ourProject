@@ -152,6 +152,7 @@ public class CampingCenterServiceImpl implements CampingCenterService {
         long diffMillis = endMillis - startMillis;
         return (int) TimeUnit.DAYS.convert(diffMillis, TimeUnit.MILLISECONDS) + 1;
     }
+    @Override
     public double calculateRevenuePerOccupiedSpace() {
         List<Reservation> reservations = reserv.getAll();
         double totalRevenue = 0;

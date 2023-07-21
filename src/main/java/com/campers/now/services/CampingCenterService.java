@@ -18,6 +18,7 @@ public interface CampingCenterService {
     CampingCenter addActivitybyCampingcenterId(Integer campingcenterId, Integer activityId);
     double[] calculateOccupancyRate() ;
     double[]  calculateADR();
+    double calculateRevenuePerOccupiedSpace();
 
 
 

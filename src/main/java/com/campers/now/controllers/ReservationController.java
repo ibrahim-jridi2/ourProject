@@ -4,9 +4,8 @@ import com.campers.now.models.Reservation;
 import com.campers.now.services.ReservationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,5 +41,10 @@ public class ReservationController {
     public List<Reservation> getAll() {
 
         return reservationService.getAll();
+    }
+    @GetMapping("/statistics")
+    public ResponseEntity<List<Object[]>> getReservationStatisticsByMonth() {
+
+        return reservationService.getReservationStatisticsByMonth();
     }
 }

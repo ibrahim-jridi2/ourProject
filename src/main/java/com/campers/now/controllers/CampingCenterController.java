@@ -60,5 +60,9 @@ public class CampingCenterController {
     public  double[]  calculateADR(){
         return campingCenterService.calculateADR();
     }
+    @GetMapping("calculateRevenuePerOccupiedSpace")
+    public double calculateRevenuePerOccupiedSpace(){
+        return campingCenterService.calculateRevenuePerOccupiedSpace();
+    }
 
 }
