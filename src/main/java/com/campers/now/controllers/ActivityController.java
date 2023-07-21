@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Tag(name = "Activity Management")
 @RestController
@@ -49,11 +50,11 @@ public class ActivityController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/{campId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Activity update(@RequestBody Activity activity, @PathVariable("id") Integer id) {
+    public Activity update(@RequestBody Activity activity, @PathVariable("id") Integer id,@PathVariable("campId") Integer campId) {
         activity.setId(id);
-        return activityService.update(activity);
+        return activityService.update(activity,campId);
     }
 
     @GetMapping("/{id}")
@@ -131,6 +132,13 @@ public class ActivityController {
         return activityService.getCampingsList(page, sort, sortDir,actId);
     }
 
+    @GetMapping("/top5-most-reserved")
+    public ResponseEntity<List<Object>> getTop5MostReservedActivities() {
+        // Call the service method to get the top 5 most reserved activities
+        List<Object> top5Activities = activityService.getTop5MostReservedActivities();
 
+        // Return the results as a response entity (You can also return them as JSON or any other format)
+        return ResponseEntity.ok(top5Activities);
+    }
 
 }

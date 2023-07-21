@@ -28,4 +28,14 @@ public interface ActivityRepository extends JpaRepository<Activity, Integer> {
     List<CampingCenter> findCampingCentersByActId(@Param("actId") Integer actId);
 
 
+    @Query(value = "SELECT a.label as label,a.image as image, COUNT(r) as reservation_count " +
+            "FROM Reservation r " +
+            "JOIN r.activities a " +
+            "GROUP BY a.id, a.label " +
+            "ORDER BY COUNT(r) DESC")
+    List<Object> findTop();
 }
+
+
+
+
