@@ -17,9 +17,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -53,9 +51,18 @@ public class ActivityServiceImpl implements ActivityService {
 
 
     @Override
-    public Activity update(Activity o) {
+       public Activity update(Activity o, Integer campingcenterId) {
+        String currentSeason = getCurrentSeason();
+        CampingCenter campingCenter = campingCenterRepository.findById(campingcenterId).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+        o.setCampingCenter(campingCenter);
         getById(o.getId());
+
         try {
+            if (o.getSeason().toString() == currentSeason) {
+                o.setActive(true);
+            } else {
+                o.setActive(false);
+            }
             return activityRepository.save(o);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -84,13 +91,13 @@ public class ActivityServiceImpl implements ActivityService {
         int month = currentDate.getMonthValue();
 
         if (month >= 3 && month <= 5) {
-            return "spring";
+            return "SPRING";
         } else if (month >= 6 && month <= 8) {
-            return "summer";
+            return "SUMMER";
         } else if (month >= 9 && month <= 11) {
-            return "autumn";
+            return "AUTUMN";
         } else {
-            return "winter";
+            return "WINTER";
         }
     }
 
@@ -169,4 +176,16 @@ public class ActivityServiceImpl implements ActivityService {
         }
     }
 
+
+    public List<CampingCenter> getCampingsList(Integer pageNumber, String property, Sort.Direction direction, Integer actId) {
+        return activityRepository.findCampingCentersByActId(actId);
+    }
+
+
+
+    public List<Object> getTop5MostReservedActivities() {
+        // Call the custom query method to get the top 5 most reserved activities
+        return activityRepository.findTop();
+    }
 }
+
