@@ -2,6 +2,7 @@ package com.campers.now.controllers;
 
 import com.campers.now.models.Activity;
 import com.campers.now.models.CampingCenter;
+
 import com.campers.now.services.ActivityService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,7 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:4200")
 public class ActivityController {
     ActivityService activityService;
+
 
     @PostMapping("")
     @PreAuthorize("hasRole('ROLE_ADMIN')")

@@ -80,6 +80,12 @@
             <artifactId>archunit</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.stripe</groupId>
+            <artifactId>stripe-java</artifactId>
+            <version>20.61.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>

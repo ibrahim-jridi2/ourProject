@@ -31,7 +31,7 @@ public class Product implements Serializable {
     private int stock;
     @Enumerated(EnumType.STRING)
     private VendingType vendingType;
-    private boolean isActive;
+    private boolean active;
     @CreationTimestamp
     private Instant createdAt;
     @UpdateTimestamp

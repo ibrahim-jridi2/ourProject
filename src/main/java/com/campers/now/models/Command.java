@@ -23,13 +23,14 @@ public class Command implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String matricule;
-    private boolean isConfirmed;
-    private String customerName;
-    private String customerEmail;
     private String shippingAddress;
-    private String commandStatus;
-    private String paymentMethod;
+    private String method;
+    private boolean confirmed;
+    private String customerFirstName;
+    private String customerLastName;
+    private String customerEmail;
+    private String phoneNumber;
+
 
     @CreationTimestamp
     private Instant createdAt;
@@ -38,12 +39,12 @@ public class Command implements Serializable {
     private Instant modifiedAt;
 
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "command", fetch = FetchType.EAGER)
-
-    private List<ProductCommand> productCommands;
-
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "buyer_id")
     private User buyer;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "command", fetch = FetchType.EAGER)
+
+    private List<ProductCommand> productCommands;
 }
