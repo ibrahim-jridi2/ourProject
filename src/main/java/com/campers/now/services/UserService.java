@@ -21,9 +21,9 @@ public interface UserService {
 
     User getByEmail(String email);
 
-    List<Map<String, Object>> getRevenueByUserIdForEveryYearAndMonth(Integer userId);
+    List<Map<String, Object>> getStatsByUserIdForEveryYearAndMonth(Integer userId);
 
-    List<Map<String, Object>> getRevenueByUserIdAndSeason(Integer userId);
+    List<Map<String, Object>> getStatsByUserIdAndSeason(Integer userId);
 
     List<Map<String, Object>> getRecentlyViewedCampingCenters(@Param("userID") Integer userID);
 

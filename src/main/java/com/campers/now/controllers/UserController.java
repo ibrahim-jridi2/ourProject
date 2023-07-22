@@ -1,8 +1,6 @@
 package com.campers.now.controllers;
 
 import com.campers.now.DTO.UserRequest;
-import com.campers.now.models.CampingCenter;
-import com.campers.now.models.Post;
 import com.campers.now.models.Role;
 import com.campers.now.models.User;
 import com.campers.now.repositories.RoleRepository;
@@ -62,16 +60,14 @@ public class UserController {
         return userService.getSuggestedPosts(tags);
     }
 
-    @Secured("ROLE_SUPER_ADMIN")
-    @GetMapping("/revenue-by-season/{id}")
-    public List<Map<String, Object>> getRevenueBySeason(@PathVariable("id") Integer id) {
-        return userService.getRevenueByUserIdAndSeason(id);
+    @GetMapping("/stats-by-season/{id}")
+    public List<Map<String, Object>> getStatsBySeason(@PathVariable("id") Integer id) {
+        return userService.getStatsByUserIdAndSeason(id);
     }
 
-    @Secured("ROLE_SUPER_ADMIN")
-    @GetMapping("/revenue-by-date/{id}")
-    public List<Map<String, Object>> getRevenueByDate(@PathVariable("id") Integer id) {
-        return userService.getRevenueByUserIdForEveryYearAndMonth(id);
+    @GetMapping("/stats-by-date/{id}")
+    public List<Map<String, Object>> getStatsByDate(@PathVariable("id") Integer id) {
+        return userService.getStatsByUserIdForEveryYearAndMonth(id);
     }
 
     @GetMapping

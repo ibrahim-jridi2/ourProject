@@ -135,12 +135,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public List<Map<String, Object>> getRevenueByUserIdForEveryYearAndMonth(Integer userId) {
+    public List<Map<String, Object>> getStatsByUserIdForEveryYearAndMonth(Integer userId) {
         return userRepository.getRevenueByUserIdForEveryYearAndMonth(userId);
     }
 
     @Override
-    public List<Map<String, Object>> getRevenueByUserIdAndSeason(Integer userId) {
+    public List<Map<String, Object>> getStatsByUserIdAndSeason(Integer userId) {
         return userRepository.getRevenueByUserIdAndSeason(userId);
     }
 

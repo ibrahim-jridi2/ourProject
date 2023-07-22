@@ -21,7 +21,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT " +
             "YEAR(r.dateStart) AS year, " +
             "MONTH(r.dateStart) AS month, " +
-            "SUM(r.totalAmount) AS revenue" +
+            "r.dateStart AS date, " +
+            "SUM(r.totalAmount) AS revenue," +
+            "COUNT(r.id) AS countReservation" +
             " FROM Reservation r " +
             "WHERE r.isConfirmed = true AND r.user.id = :userId " +
             "GROUP BY YEAR(r.dateStart), MONTH(r.dateStart)")
@@ -29,7 +31,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("SELECT " +
             "a.season AS season, " +
-            "SUM(r.totalAmount) AS revenue" +
+            "SUM(r.totalAmount) AS revenue," +
+            "COUNT(r.id) AS countReservation" +
             " FROM Reservation r " +
             "JOIN r.activities a " +
             "WHERE r.isConfirmed = true AND r.user.id = :userId " +
