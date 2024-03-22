@@ -23,7 +23,7 @@ public class HelloController {
     public Message hello() {
         var jwt = (CustomJwt) SecurityContextHolder.getContext().getAuthentication();
         var message = MessageFormat
-                .format("Hello fullstack master {0} {1}, how is it going today?",
+                .format("Hello  {0} {1}, how is it going today?",
                         jwt.getFirstname(), jwt.getLastname());
         return new Message(message);
     }

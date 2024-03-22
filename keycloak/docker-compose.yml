@@ -10,7 +10,7 @@ services:
       retries: 10
     volumes:
       # change this to your local path
-      - "postgres_data:/c/tutorials/volume"
+      - postgres_data:/d/esprit/2eme-annee/microservice/OurWork/postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -47,8 +47,26 @@ services:
       - "8787:8787" # debug port
     networks:
       - local
-    # volumes:
-    #   - ./my-test-realm-realm.json:/opt/keycloak/data/import/my-test-realm-realm.json
+    volumes:
+      - ./my-test-realm-realm.json:/opt/keycloak/data/import/my-test-realm-realm.json
+
+  eurekaserver:
+    build:
+      context: D:\esprit\2eme-annee\microservice\EurekaSever
+    ports:
+      - "8888:8761"
+    image: "eur"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
+
+  demo:
+    build:
+      context: D:\esprit\2eme-annee\microservice\OurWork\backend
+    ports:
+      - "8088:8761"
+    image: "auth"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
 
 networks:
   local:
