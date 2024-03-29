@@ -39,10 +39,10 @@ public class Command implements Serializable {
     private Instant modifiedAt;
 
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "buyer_id")
-    private User buyer;
+//    @JsonIgnore
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "buyer_id")
+//    private User buyer;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "command", fetch = FetchType.EAGER)
 

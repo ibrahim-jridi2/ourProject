@@ -20,8 +20,8 @@ public class View implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    private User user;
+//    @ManyToOne
+//    private User user;
     @Schema(allowableValues = {
             "activity",
             "camping_center",

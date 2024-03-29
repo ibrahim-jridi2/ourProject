@@ -50,9 +50,7 @@ public class ProductServiceImpl implements ProductService {
             existingProduct.setDiscount(updatedProduct.getDiscount());
             existingProduct.setPrice(updatedProduct.getPrice());
             existingProduct.setStock(updatedProduct.getStock());
-            existingProduct.setVendingType(updatedProduct.getVendingType());
             existingProduct.setActive(updatedProduct.isActive());
-            existingProduct.setVendor(updatedProduct.getVendor());
 
             return productRepository.save(existingProduct);
         } else {

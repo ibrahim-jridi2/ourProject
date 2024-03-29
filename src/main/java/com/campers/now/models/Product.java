@@ -1,6 +1,5 @@
 package com.campers.now.models;
 
-import com.campers.now.models.enums.VendingType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -29,21 +28,19 @@ public class Product implements Serializable {
     private int discount;
     private float price;
     private int stock;
-    @Enumerated(EnumType.STRING)
-    private VendingType vendingType;
+//    @Enumerated(EnumType.STRING)
+//    private VendingType vendingType;
     private boolean active;
     @CreationTimestamp
     private Instant createdAt;
     @UpdateTimestamp
     private Instant modifiedAt;
-    @NotNull
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
-    private User vendor;
+//    @NotNull
+//    @JsonIgnore
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    private User vendor;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
-    @JsonIgnore
-    private List<FeedBack> feedBacks;
+
 
     @OneToMany(mappedBy = "product")
     @JsonIgnore
