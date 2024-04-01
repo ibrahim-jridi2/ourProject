@@ -108,6 +108,15 @@ services:
     image: "auth"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
+#gateway micro (ibrahim): 
+  gateway-micro:
+    build:
+      context: D:\esprit\2eme-annee\microservice\OurWork\API_GATEWAY_SERVE
+    ports:
+      - "9999:8761"
+    image: "auth"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
 
 networks:
   local:
