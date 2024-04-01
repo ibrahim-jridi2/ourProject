@@ -1,16 +1,12 @@
-# Use the official Python base image
-FROM python:3.10
+FROM python:3.9
 
-# Set the working directory
+WORKDIR D:/esprit/2eme-annee/microservice/feedback_module/
 
+COPY requirements.txt  D:/esprit/2eme-annee/microservice/feedback_module/
+RUN pip install --no-cache-dir -r requirements.txt
 
+COPY . D:/esprit/2eme-annee/microservice/feedback_module/
 
-
-
-# Copy the application code
-COPY . .
-RUN pip install --upgrade pip
-RUN pwd > aa.txt && cat aa.txt
-# RUN pip install -r ./requirements.txt
-# Expose the port the app will run on
 EXPOSE 8000
+
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

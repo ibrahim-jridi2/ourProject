@@ -3,13 +3,12 @@ services:
   app:
     build: 
       context: .
-      dockerfile:  C:/Users/a.bouhrira/OneDrive - NUMERYX/Bureau/microserviceProjet/feedback_module/Dockerfile
+      dockerfile:  D:/esprit/2eme-annee/microservice/feedback_module/Dockerfile
     container_name: app-feedback-container
-    command: python ./feedback_module/manage.py runserver 0.0.0.0:8000
     ports:
       - "80:8000"
     volumes:
-      - .:/usr/src/app
+      - .: D:/esprit/2eme-annee/microservice/feedback_module/app
     depends_on:
       - postgres
 #keycloak-databases: (ibrahim)
@@ -22,7 +21,7 @@ services:
     environment:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
-      POSTGRES_DB: keycloak
+      POSTGRES_DB: keycloak,feedback_db
 
   pgadmin:
     container_name: pgadmin
@@ -60,7 +59,7 @@ services:
       retries: 10
     volumes:
       # change this to your local path
-      - postgres_data:/d/esprit/2eme-annee/microservice/OurWork/postgres
+      - postgres_data: D:\esprit\2eme-annee\microservice\OurWork\postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -111,18 +110,21 @@ services:
       - local
     # volumes:
     #   - ./my-test-realm-realm.json:/opt/keycloak/data/import/my-test-realm-realm.json
-  eurekaserver:
-    build:
-      context: C:/Users/a.bouhrira/OneDrive - NUMERYX/Bureau/microserviceProjet/EurekaSever
-    ports:
-      - "8888:8761"
-    image: "eur"
+ ### (amani bouhrira)
+  mysqldb:
+    image: mysql:latest
+    restart: unless-stopped
+    env_file: ./.env
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
-
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=
+    ports:
+      - 3309:3309
+    volumes:
+      - db: D:\esprit\2eme-annee\microservice\OurWork\mysql
   module-comment:
     build:
-      context: C:/Users/a.bouhrira/OneDrive - NUMERYX/Bureau/microserviceProjet/module-comment
+      context: D:/esprit/2eme-annee/microservice/feedback_module/module-comment
     ports:
       - "8088:8761"
     image: "can"
@@ -131,10 +133,12 @@ services:
 
   module-post:
     build:
-      context: C:/Users/a.bouhrira/OneDrive - NUMERYX/Bureau/microserviceProjet/module-post
+      context: D:/esprit/2eme-annee/microservice/feedback_module/module-post
     ports:
       - "8081:8761"
     image: "job"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
 
 #auth micro (ibrahim): 
   auth-micro:
