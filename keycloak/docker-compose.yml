@@ -1,5 +1,17 @@
 version: "3.9"
 services:
+  app:
+    build: 
+      context: .
+      dockerfile:  C:/Users/a.bouhrira/OneDrive - NUMERYX/Bureau/microserviceProjet/feedback_module/Dockerfile
+    container_name: app-feedback-container
+    command: python ./feedback_module/manage.py runserver 0.0.0.0:8000
+    ports:
+      - "80:8000"
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - postgres
   postgres:
     container_name: db
     image: "postgres:14.4"
@@ -49,6 +61,32 @@ services:
       - local
     # volumes:
     #   - ./my-test-realm-realm.json:/opt/keycloak/data/import/my-test-realm-realm.json
+  eurekaserver:
+    build:
+      context: C:/Users/a.bouhrira/OneDrive - NUMERYX/Bureau/microserviceProjet/EurekaSever
+    ports:
+      - "8888:8761"
+    image: "eur"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
+
+  module-comment:
+    build:
+      context: C:/Users/a.bouhrira/OneDrive - NUMERYX/Bureau/microserviceProjet/module-comment
+    ports:
+      - "8088:8761"
+    image: "can"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
+
+  module-post:
+    build:
+      context: C:/Users/a.bouhrira/OneDrive - NUMERYX/Bureau/microserviceProjet/module-post
+    ports:
+      - "8081:8761"
+    image: "job"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
 
 networks:
   local:

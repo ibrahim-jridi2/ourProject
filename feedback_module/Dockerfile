@@ -2,15 +2,15 @@
 FROM python:3.10
 
 # Set the working directory
-WORKDIR C:/Users/a.bouhrira/OneDrive - NUMERYX/Bureau/microserviceProjet/feedback_module
 
-# Install dependencies
-# COPY C:/Users/a.bouhrira/OneDrive - NUMERYX/Bureau/microserviceProjet/feedback_module/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+
+
 
 
 # Copy the application code
 COPY . .
-
+RUN pip install --upgrade pip
+RUN pwd > aa.txt && cat aa.txt
+# RUN pip install -r ./requirements.txt
 # Expose the port the app will run on
 EXPOSE 8000
