@@ -15,7 +15,7 @@
 	<description>API_GATEWAY_SERVE for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
-		<spring-cloud.version>2022.0.5</spring-cloud.version>
+<!--		<spring-cloud.version>2022.0.5</spring-cloud.version>-->
 	</properties>
 	<dependencies>
 		<dependency>
@@ -42,8 +42,8 @@
 		<dependencies>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
+				<artifactId>spring-cloud-starter-parent</artifactId>
+				<version>2021.0.3</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
