@@ -8,12 +8,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AccessDeniedComponent } from './access-denied/access-denied.component';
 import { UserInfoComponent } from './user-info/user-info.component';
 import {HttpClientModule} from "@angular/common/http";
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AccessDeniedComponent,
-    UserInfoComponent
+    UserInfoComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
