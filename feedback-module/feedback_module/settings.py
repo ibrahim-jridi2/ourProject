@@ -78,10 +78,10 @@ WSGI_APPLICATION = 'feedback_module.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'feedback_db',
+        'NAME': 'keycloak',
         'USER': 'admin',
-        'PASSWORD': 'admin',
-        'HOST': 'localhost',
+        'PASSWORD': 'aa',
+        'HOST': 'postgresql' ,
         'PORT': '5432',
     }
 }
