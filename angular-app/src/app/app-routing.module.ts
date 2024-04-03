@@ -4,6 +4,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {AccessDeniedComponent} from "./access-denied/access-denied.component";
 import {AuthGuard} from "./auth/auth.guard";
 import {UserInfoComponent} from "./user-info/user-info.component";
+import { NotFoundComponent } from './components/not-found/not-found/not-found.component';
 
 const routes: Routes = [
   {
@@ -17,7 +18,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     // The user need to have these roles to access page
     data: { roles: ['user'] }
-  }
+  },
+  { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({

@@ -20,8 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/payments")
 public class PaymentController {
 
-    @Value("${stripe.apiKey}")
-    private String stripeApiKey;
+
 
     private final CommandRepository commandRepository;
     private final PaymentRepository paymentRepository;
@@ -35,7 +34,6 @@ public class PaymentController {
     public ResponseEntity<String> makePayment(@RequestBody ProductCommand productCommand,
                                               @RequestParam String paymentMethod) {
         try {
-            Stripe.apiKey = stripeApiKey;
 
 
             PaymentIntentCreateParams createParams = new PaymentIntentCreateParams.Builder()

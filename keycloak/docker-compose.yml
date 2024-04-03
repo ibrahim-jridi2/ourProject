@@ -35,6 +35,8 @@ services:
 
   keycloak:
     image: quay.io/keycloak/keycloak:20.0.0
+    volumes:
+      - D:\esprit\2eme-annee\microservice\OurWork\realm-export.json:/tmp/realm-export.json
     environment:
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgresql:5432/keycloak
@@ -42,13 +44,14 @@ services:
       KC_DB_PASSWORD: admin
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+      KEYCLOAK_IMPORT: /tmp/realm-export.json
       # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
       #JDBC_PARAMS: "ssl=true"
     ports:
       - "8081:8081"
     command: [ "start-dev", "--http-port=8081" ]
     depends_on:
-      - postgresql
+      - postgres1
   postgres:
     container_name: db
     image: "postgres:14.4"
@@ -146,6 +149,15 @@ services:
       context: D:\esprit\2eme-annee\microservice\OurWork\spring-app
     ports:
       - "8088:8761"
+    image: "auth"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
+#gateway micro (ibrahim): 
+  gateway-micro:
+    build:
+      context: D:\esprit\2eme-annee\microservice\OurWork\API_GATEWAY_SERVE
+    ports:
+      - "9999:8761"
     image: "auth"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
