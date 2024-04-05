@@ -1,16 +1,5 @@
 version: "3.9"
 services:
-  app:
-    build: 
-      context: .
-      dockerfile:  D:/esprit/2eme-annee/microservice/feedback_module/Dockerfile
-    container_name: app-feedback-container
-    ports:
-      - "80:8000"
-    volumes:
-      - .: D:/esprit/2eme-annee/microservice/feedback_module/app
-    depends_on:
-      - postgres
 #keycloak-databases: (ibrahim)
   postgresql:
     container_name: postgres1
@@ -21,7 +10,7 @@ services:
     environment:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
-      POSTGRES_DB: keycloak,feedback_db
+      POSTGRES_DB: keycloak
 
   pgadmin:
     container_name: pgadmin
@@ -36,7 +25,7 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:20.0.0
     volumes:
-      - D:\esprit\2eme-annee\microservice\OurWork\realm-export.json:/tmp/realm-export.json
+      - D:\esprit\2eme-annee\microservice\realm-export.json:/tmp/realm-export.json
     environment:
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgresql:5432/keycloak
@@ -51,9 +40,9 @@ services:
       - "8081:8081"
     command: [ "start-dev", "--http-port=8081" ]
     depends_on:
-      - postgres1
+      - postgresql
   postgres:
-    container_name: db
+    # container_name: db
     image: "postgres:14.4"
     healthcheck:
       test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres" ]
@@ -62,7 +51,7 @@ services:
       retries: 10
     volumes:
       # change this to your local path
-      - postgres_data: D:\esprit\2eme-annee\microservice\OurWork\postgres
+      - postgres_data:/d/esprit/2eme-annee/microservice/postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -107,13 +96,56 @@ services:
     build:
       context: D:\esprit\2eme-annee\microservice\EurekaSever
     ports:
-      - "8180:8080"
-      - "8787:8787" # debug port
-    networks:
-      - local
+      - "8888:8761"
+    image: "eur"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
+
+
+#auth micro (ibrahim): 
+  # auth-micro:
+  #   build:
+  #     context: D:\esprit\2eme-annee\microservice\spring-app
+  #   ports:
+  #     - "8088:8761"
+  #   image: "auth"
+  #   environment:
+  #     - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
+#gateway micro (ibrahim): 
+  # gateway-micro:
+  #   build:
+  #     context: D:\esprit\2eme-annee\microservice\API_GATEWAY_SERVE
+  #   ports:
+  #     - "9999:8761"
+  #   image: "auth"
+  #   environment:
+  #     - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
+
+
+### (amani bouhrira)
+
+  db:
+    build:
+      context: ./mongodb
+    ports:
+      - "27017:27017"
     # volumes:
-    #   - ./my-test-realm-realm.json:/opt/keycloak/data/import/my-test-realm-realm.json
- ### (amani bouhrira)
+    #   - mongodb_data:/data/db
+
+
+  app-feedback:
+    build:
+      context: D:\esprit\2eme-annee\microservice\feedback-module
+      dockerfile: Dockerfile
+    command: python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000
+    # volumes:
+    #   - ../feedback_module:/app
+    ports:
+      - "8000:8000"
+    # networks:
+    #   - local
+    depends_on:
+      - db
   mysqldb:
     image: mysql:latest
     restart: unless-stopped
@@ -124,43 +156,28 @@ services:
     ports:
       - 3309:3309
     volumes:
-      - db: D:\esprit\2eme-annee\microservice\OurWork\mysql
+      - mysql_data:/var/lib/mysql
   module-comment:
     build:
-      context: D:/esprit/2eme-annee/microservice/feedback_module/module-comment
+      context: D:/esprit/2eme-annee/microservice/module-comment
     ports:
-      - "8088:8761"
+      - "8088:8787"
     image: "can"
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
-
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8787/eureka/
+    depends_on:
+      - mysqldb
+      ################################################################
   module-post:
     build:
-      context: D:/esprit/2eme-annee/microservice/feedback_module/module-post
+      context: D:/esprit/2eme-annee/microservice/module-post
     ports:
-      - "8081:8761"
+      - "8089:8787"
     image: "job"
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
-
-#auth micro (ibrahim): 
-  auth-micro:
-    build:
-      context: D:\esprit\2eme-annee\microservice\OurWork\spring-app
-    ports:
-      - "8088:8761"
-    image: "auth"
-    environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
-#gateway micro (ibrahim): 
-  gateway-micro:
-    build:
-      context: D:\esprit\2eme-annee\microservice\OurWork\API_GATEWAY_SERVE
-    ports:
-      - "9999:8761"
-    image: "auth"
-    environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8787/eureka/
+    depends_on:
+      - mysqldb
 
 networks:
   local:
@@ -169,3 +186,5 @@ networks:
 
 volumes:
   postgres_data:
+  mysql_data:
+  mongodb_data:
