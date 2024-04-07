@@ -121,6 +121,17 @@ services:
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
 
+
+#shop-module(amani nasri):
+        shop-micro:
+    build:
+      context: D:\microservice Project\ourProject\micro-shop
+    ports:
+      - "8083:8761"
+    image: "shop"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
+
 networks:
   local:
     name: local
