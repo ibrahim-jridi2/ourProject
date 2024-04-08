@@ -40,7 +40,7 @@ services:
       - "8081:8081"
     command: [ "start-dev", "--http-port=8081" ]
     depends_on:
-      - postgres1
+      - postgresql
   postgres:
     container_name: db
     image: "postgres:14.4"
@@ -94,7 +94,7 @@ services:
 #eureuka server (ibrahim)
   eurekaserver:
     build:
-      context: D:\esprit\2eme-annee\microservice\EurekaSever
+      context: ./../EurekaSever
     ports:
       - "8888:8761"
     image: "eur"
@@ -105,7 +105,7 @@ services:
 #auth micro (ibrahim): 
   auth-micro:
     build:
-      context: D:\esprit\2eme-annee\microservice\OurWork\spring-app
+      context: ./../spring-app
     ports:
       - "8088:8761"
     image: "auth"
@@ -115,7 +115,7 @@ services:
 #reservation micro (ayed):
   reservation-micro:
     build:
-      context: C:\Users\ayed\Desktop\12\ourProject\reservation_Micro
+      context: ./../reservation_Micro
     ports:
       - "8091:8091"
     image: "reservation"
@@ -124,7 +124,7 @@ services:
 #gateway micro (ibrahim): 
   gateway-micro:
     build:
-      context: D:\esprit\2eme-annee\microservice\OurWork\API_GATEWAY_SERVE
+      context: ./../API_GATEWAY_SERVE
     ports:
       - "9999:8761"
     image: "auth"
@@ -133,9 +133,9 @@ services:
 
 
 #shop-module(amani nasri):
-        shop-micro:
+  shop-micro:
     build:
-      context: D:\microservice Project\ourProject\micro-shop
+      context: ./../micro-shop
     ports:
       - "8083:8761"
     image: "shop"

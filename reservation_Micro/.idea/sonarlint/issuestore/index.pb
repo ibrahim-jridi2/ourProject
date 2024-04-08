@@ -13,3 +13,8 @@ k
 ;src/main/java/com/campers/now/services/ActivityService.java,c\d\cd30e8a837f8ca2821a42c0d1644d7683ff4a82e
 q
 Asrc/main/java/com/campers/now/controllers/ActivityController.java,7\7\77e2da6077d5f4f2804ba984cc571b31a8d53363
+:
+
+Dockerfile,6\6\6651ddff6eb82c840ced7c1dddee15c6e1913dd4
+7
+pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
