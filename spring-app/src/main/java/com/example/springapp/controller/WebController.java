@@ -3,12 +3,15 @@ package com.example.springapp.controller;
 import com.example.springapp.entity.User;
 import com.example.springapp.service.UserService;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.agent.builder.AgentBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
 @RestController
@@ -35,6 +38,10 @@ public class WebController {
         String authorities = auth.getAuthorities().toString();
 
         return "UserInfo2: " + firstname + " " + lastname + ", " + email + ", " + authorities ;
+    }
+    @GetMapping("/all")
+    public List<User> findUsers(){
+        return userService.findUsers();
     }
 
 }

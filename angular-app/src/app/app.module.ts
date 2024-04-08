@@ -9,6 +9,7 @@ import { AccessDeniedComponent } from './access-denied/access-denied.component';
 import { UserInfoComponent } from './user-info/user-info.component';
 import {HttpClientModule} from "@angular/common/http";
 import { NotFoundComponent } from './components/not-found/not-found/not-found.component';
+import { UserListComponent } from './components/user-list/user-list.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { NotFoundComponent } from './components/not-found/not-found/not-found.co
     AppComponent,
     AccessDeniedComponent,
     UserInfoComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    UserListComponent
   ],
   imports: [
     BrowserModule,
