@@ -111,6 +111,16 @@ services:
     image: "auth"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
+
+#reservation micro (ayed):
+  reservation-micro:
+    build:
+      context: C:\Users\ayed\Desktop\12\ourProject\reservation_Micro
+    ports:
+      - "8091:8091"
+    image: "reservation"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
 #gateway micro (ibrahim): 
   gateway-micro:
     build:
