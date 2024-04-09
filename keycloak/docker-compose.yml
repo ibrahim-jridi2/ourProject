@@ -42,7 +42,7 @@ services:
     depends_on:
       - postgresql
   postgres:
-    # container_name: db
+    container_name: db
     image: "postgres:14.4"
     healthcheck:
       test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres" ]
@@ -57,6 +57,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: keycloak
       POSTGRES_HOST: postgres
+      # - "POSTGRES_HOST_AUTH_METHOD=trust"
     networks:
       - local
     ports:
@@ -93,60 +94,62 @@ services:
 
 #eureuka server (ibrahim)
   eurekaserver:
+    container_name: eurekaserver
     build:
       context: D:\esprit\2eme-annee\microservice\EurekaSever
     ports:
-      - "8888:8761"
+      - "8761:8761"
     image: "eur"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
 
 
-#auth micro (ibrahim): 
-  # auth-micro:
-  #   build:
-  #     context: D:\esprit\2eme-annee\microservice\spring-app
-  #   ports:
-  #     - "8088:8761"
-  #   image: "auth"
-  #   environment:
-  #     - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
-#gateway micro (ibrahim): 
-  # gateway-micro:
-  #   build:
-  #     context: D:\esprit\2eme-annee\microservice\API_GATEWAY_SERVE
-  #   ports:
-  #     - "9999:8761"
-  #   image: "auth"
-  #   environment:
-  #     - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
+# auth micro (ibrahim): 
+  auth-micro:
+    build:
+      context: D:\esprit\2eme-annee\microservice\spring-app
+    ports:
+      - "8088:8761"
+    image: "auth"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
+# gateway micro (ibrahim): 
+  gateway-micro:
+    build:
+      context: D:\esprit\2eme-annee\microservice\API_GATEWAY_SERVE
+    ports:
+      - "9999:8761"
+    image: "auth"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
 
 
 ### (amani bouhrira)
 
-  db:
-    build:
-      context: ./mongodb
-    ports:
-      - "27017:27017"
-    # volumes:
-    #   - mongodb_data:/data/db
 
-
-  app-feedback:
-    build:
-      context: D:\esprit\2eme-annee\microservice\feedback-module
-      dockerfile: Dockerfile
-    command: python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000
-    # volumes:
-    #   - ../feedback_module:/app
+  feedback-servicee-app-13:
+    build: D:\esprit\2eme-annee\microservice\feedback-module
+    # restart: always
+    command:  sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    env_file:
+      - .env
     ports:
-      - "8000:8000"
-    # networks:
-    #   - local
+      - "127.0.0.1:8000:8761"
+    volumes:
+      - .:/code
+    networks:
+      - local
+    links:
+      - postgres
     depends_on:
-      - db
+       - postgres
+       - eurekaserver
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
+
+    
   mysqldb:
+    container_name: mysqldb
     image: mysql:latest
     restart: unless-stopped
     env_file: ./.env
@@ -157,27 +160,29 @@ services:
       - 3309:3309
     volumes:
       - mysql_data:/var/lib/mysql
-  module-comment:
+  module-comment-app:
     build:
       context: D:/esprit/2eme-annee/microservice/module-comment
     ports:
-      - "8088:8787"
+      - "8088:8761"
     image: "can"
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8787/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
     depends_on:
       - mysqldb
+      - eurekaserver
       ################################################################
-  module-post:
+  module-post-app:
     build:
       context: D:/esprit/2eme-annee/microservice/module-post
     ports:
-      - "8089:8787"
+      - "8089:8761"
     image: "job"
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8787/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
     depends_on:
       - mysqldb
+      - eurekaserver
 
 networks:
   local:
