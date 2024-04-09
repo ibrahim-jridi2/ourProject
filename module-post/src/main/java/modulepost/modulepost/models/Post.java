@@ -31,6 +31,6 @@ public class Post implements Serializable {
     @UpdateTimestamp
     private Instant modifiedAt;
 //    @ManyToOne(fetch = FetchType.EAGER)
-//    private User user;
+   private Integer user;
 
 }

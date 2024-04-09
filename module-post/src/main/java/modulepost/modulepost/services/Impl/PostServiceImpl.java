@@ -20,7 +20,11 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
+// add communication
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 @AllArgsConstructor
 @Service
 public class PostServiceImpl implements PostService {
@@ -54,20 +58,16 @@ public class PostServiceImpl implements PostService {
         }
     }
 
-//    @Override
-//    public Post addPost(Post post, Integer id) {
-//        User user = userRepository.findById(id)
-//                .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
-//        post.setUser(user);
-//
-//        try {
-//            return postRepository.save(post);
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//
-//    }
+   @Override
+   public Post addPost(Post post) {
+       try {
+           return postRepository.save(post);
+       } catch (Exception e) {
+           throw new RuntimeException(e);
+       }
+
+
+   }
 
     public Post update(Post post) {
         getById(post.getId());
@@ -81,18 +81,18 @@ public class PostServiceImpl implements PostService {
 //    public List<Post> getPostsByUserMostComments(Integer id, int limit) {
 //        // Step 1: Retrieve User's Comments
 //        List<Comment> userComments = commentRepository.findByUserId(id);
-//
+
 //        // Step 2: Count Comment Occurrences
 //        Map<Integer, Integer> postCommentCountMap = new HashMap<>();
 //        for (Comment comment : userComments) {
 //            int postId = comment.getPost().getId();
 //            postCommentCountMap.put(postId, postCommentCountMap.getOrDefault(postId, 0) + 1);
 //        }
-//
+
 //        // Step 3: Sort by Comment Count
 //        List<Map.Entry<Integer, Integer>> sortedEntries = new ArrayList<>(postCommentCountMap.entrySet());
 //        sortedEntries.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
-//
+
 //        // Step 4: Retrieve Posts
 //        List<Post> postsByCommentCount = new ArrayList<>();
 //        int count = 0;
@@ -107,7 +107,7 @@ public class PostServiceImpl implements PostService {
 //                }
 //            }
 //        }
-//
+
 //        return postsByCommentCount;
 //    }
 

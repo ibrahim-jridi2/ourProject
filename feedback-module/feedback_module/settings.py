@@ -11,10 +11,25 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Import EurekaClient class
+# from eureka.client import EurekaClient
+from py_eureka_client.eureka_client import EurekaClient
+
+# Eureka server URL
+EUREKA_SERVER_URL = 'http://eurekaerver:8761/eureka/'
+
+# Register your Django app with Eureka
+eureka_client = EurekaClient(app_name='feedback-module',
+                             eureka_server=EUREKA_SERVER_URL)
+
+eureka_client.start()
+# eureka_client.register_instance(instance_port=8000, instance_host='http://eurekaerver:8761/eureka/')
+eureka_client.register()
+eureka_client.heartbeat_enabled = True
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -78,13 +93,14 @@ WSGI_APPLICATION = 'feedback_module.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'mypassword',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': 'keycloak',  
+        'USER': 'postgres',  
+        'PASSWORD': 'postgres',  
+        'HOST': 'db', 
+        'PORT': '5432',  
     }
 }
+
 
 
 # Password validation

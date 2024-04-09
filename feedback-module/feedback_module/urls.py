@@ -30,9 +30,22 @@ schema_view = get_schema_view(
     public=True,
     permission_classes=(permissions.AllowAny,),
 )
-
+from backend.feedback import views
 urlpatterns = [
     # path('admin/', admin.site.urls),
-    path('/',include('backend.feedback.urls')),
+    # path('',include('backend.feedback.urls')),
+    path('getAllFeedback', views.getAllFeedback, name="getAllFeedback"),
+    path('getFeedbackById/<int:id>', views.getFeedbackById, name="getFeedbackById"),
+    path('addFeedback', views.addFeedback, name="addFeedback"),
+    path('updateFeedback/<int:id>', views.updateFeedback, name="updateFeedback"),
+    path('deleteFeedback/<int:id>', views.deleteFeedback, name="deleteFeedback"),
+    ################################################################
+    path('feedback/product/<int:productId>', views.getFeedbackProduct, name="getFeedbackByProduct"),
+    path('feedback/activity/<int:activityId>', views.getFeedbackActivity, name="getFeedbackByActivity"),
+    path('feedback/campingCenter/<int:campingCenterId>', views.getFeedbackCenter, name="getFeedbackByActivity"),
+    path('feedback/rating/<int:feedbackId>/<int:userId>', views.getFeedbackUserRating, name="getFeedbackUserRating"),
+    path('feedback/rating/activity/<int:activityId>', views.getFeedbackActivityRating, name="getFeedbackActivityRating"),
+    path('feedback/rating/product/<int:productId>', views.getFeedbackProductRating, name="getFeedbackProductRating"),
+    path('feedback/rating/campingcenter/<int:comping_centre_id>', views.getFeedbackCenterRating, name="getFeedbackCenterRating"),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]

@@ -24,10 +24,10 @@ public class PostController {
     public Post add(@RequestBody Post post) {
         return postService.add(post);
     }
-//    @PostMapping("/{id}")
-//    public Post addPost(@RequestBody Post post, @PathVariable("id") Integer id) {
-//        return postService.addPost(post, id);
-//    }
+   @PostMapping("/")
+   public Post addPost(@RequestBody Post post) {
+       return postService.addPost(post);
+   }
 
     @PutMapping("/{id}")
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")

@@ -13,7 +13,7 @@ public interface PostService {
 
     Post add(Post o);
 
-//    Post addPost(Post post, Integer id);
+   Post addPost(Post post);
 
     Post update(Post o);
 //    List<Post> getPostsByUserMostComments(Integer id, int limit);
