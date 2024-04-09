@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: '/api',
+  endpoint:'http://localhost:8080',
   keycloak: {
     // Url of the Identity Provider
     issuer: 'http://localhost:8081',
@@ -12,6 +13,7 @@ export const environment = {
     realm: 'test-app',
     clientId: 'frontend'
   },
+ 
 };
 
 /*
