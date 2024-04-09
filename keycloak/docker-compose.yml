@@ -137,7 +137,7 @@ services:
 ### (amani bouhrira)
 
 
-  feedback-servicee-app-13:
+  feedback-servicee-app-final:
     build: ./../feedback-module
     # restart: always
     command:  sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"

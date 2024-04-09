@@ -27,7 +27,8 @@ eureka_client = EurekaClient(app_name='feedback-module',
                              eureka_server=EUREKA_SERVER_URL)
 
 eureka_client.start()
-eureka_client.register_instance(instance_port=8000, instance_host='http://eurekaerver:8761/eureka/')
+# eureka_client.register_instance(instance_port=8000, instance_host='http://eurekaerver:8761/eureka/')
+eureka_client.register()
 eureka_client.heartbeat_enabled = True
 
 # Quick-start development settings - unsuitable for production
