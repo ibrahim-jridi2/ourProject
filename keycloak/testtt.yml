@@ -1,0 +1,46 @@
+version: "3.9"
+services:
+  mysqldb:
+    container_name: mysqldb
+    image: mysql:latest
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - springapimysql-net
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+ 
+  module-comment:
+    build:
+      context: ../module-comment
+    ports:
+      - "8084:8761"
+    image: "module-comment"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
+    # SPRING_APPLICATION_JSON: '{"spring.datasource.url": "jdbc:mysql://mysqldb:3306/commentCampingdb?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true", "spring.datasource.username": "root", "spring.datasource.password": "root", "spring.jpa.properties.hibernate.dialect": "org.hibernate.dialect.MySQL5InnoDBDialect", "spring.jpa.hibernate.ddl-auto": "update"}'
+   
+    depends_on:
+      - mysqldb
+      # - eurekaserver
+    networks:
+      - springapimysql-net
+      ################################################################
+  
+
+
+networks:
+  local:
+    name: local
+    driver: bridge
+  springapimysql-net:
+
+volumes:
+  postgres_data:
+  mysql_data:
+
+
+ 
