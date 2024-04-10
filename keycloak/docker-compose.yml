@@ -107,7 +107,7 @@ services:
 # auth micro (ibrahim): 
   auth-micro:
     build:
-      context: ./../spring-app
+      context: ../spring-app
     ports:
       - "8088:8761"
     image: "auth"
@@ -117,7 +117,7 @@ services:
 #reservation micro (ayed):
   reservation-micro:
     build:
-      context: ./../reservation_Micro
+      context: ../reservation_Micro
     ports:
       - "8091:8091"
     image: "reservation"
@@ -126,7 +126,7 @@ services:
 #gateway micro (ibrahim): 
   gateway-micro:
     build:
-      context: ./../API_GATEWAY_SERVE
+      context: ../API_GATEWAY_SERVE
     ports:
       - "9999:8761"
     image: "auth"
@@ -137,8 +137,8 @@ services:
 ### (amani bouhrira)
 
 
-  feedback-servicee-app-final:
-    build: ./../feedback-module
+  feedback-servicee-app-finall:
+    build: ../feedback-module
     # restart: always
     command:  sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     env_file:
@@ -172,10 +172,10 @@ services:
       - mysql_data:/var/lib/mysql
   module-comment-app:
     build:
-      context: ./../module-comment
+      context: ../module-comment
     ports:
       - "8088:8761"
-    image: "can"
+    image: "module-comment"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
     depends_on:
@@ -184,10 +184,10 @@ services:
       ################################################################
   module-post-app:
     build:
-      context: ./../module-post
+      context: ../module-post
     ports:
       - "8089:8761"
-    image: "job"
+    image: "module-post"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
     depends_on:
@@ -196,12 +196,15 @@ services:
 #shop-module(amani nasri):
   shop-micro:
     build:
-      context: ./../micro-shop
+      context: ../micro-shop
     ports:
       - "8083:8761"
     image: "shop"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
+    depends_on:
+      - mysqldb
+      - eurekaserver
 
 networks:
   local:
