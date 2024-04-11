@@ -17,19 +17,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Import EurekaClient class
 # from eureka.client import EurekaClient
-from py_eureka_client.eureka_client import EurekaClient
+# from py_eureka_client.eureka_client import EurekaClient
 
-# Eureka server URL
-EUREKA_SERVER_URL = 'http://eurekaerver:8761/eureka/'
+# # Eureka server URL
+# EUREKA_SERVER_URL = 'http://localhost:8761/eureka/'
 
-# Register your Django app with Eureka
-eureka_client = EurekaClient(app_name='feedback-module',
-                             eureka_server=EUREKA_SERVER_URL)
+# # Register your Django app with Eureka
+# eureka_client = EurekaClient(app_name='feedback-module',
+#                              eureka_server=EUREKA_SERVER_URL)
 
-eureka_client.start()
-# eureka_client.register_instance(instance_port=8000, instance_host='http://eurekaerver:8761/eureka/')
-eureka_client.register()
-eureka_client.heartbeat_enabled = True
+# eureka_client.start()
+# # eureka_client.register_instance(instance_port=8000, instance_host='http://eurekaerver:8761/eureka/')
+# eureka_client.register()
+# eureka_client.heartbeat_enabled = True
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
