@@ -175,7 +175,7 @@ services:
     build:
       context: ../module-comment
     ports:
-      - "8084:8761"
+      - "8084:8084"
     image: "module-comment"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
@@ -191,7 +191,7 @@ services:
     build:
       context: ../module-post
     ports:
-      - "8089:8761"
+      - "8089:8089"
     image: "module-post"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
