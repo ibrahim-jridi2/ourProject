@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,7 @@ import java.util.List;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "**")
 @RequiredArgsConstructor
 public class WebController {
 
@@ -40,8 +41,16 @@ public class WebController {
         return "UserInfo2: " + firstname + " " + lastname + ", " + email + ", " + authorities ;
     }
     @GetMapping("/all")
-    public List<User> findUsers(){
-        return userService.findUsers();
+    public ResponseEntity<List<User>> findUsers(){
+        List<User> users = userService.findUsers();
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping(path = "/user")
+    public User getUserInfo() {
+        User user = userService.getLoggedUser();
+
+        return user;
     }
 
 }

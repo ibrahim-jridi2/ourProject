@@ -129,7 +129,7 @@ services:
       context: ../API_GATEWAY_SERVE
     ports:
       - "9999:8761"
-    image: "auth"
+    image: "gateway"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
 

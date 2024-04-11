@@ -10,8 +10,8 @@ export class WebApiService {
 
   constructor(private http: HttpClient) { }
 
-  public getUserInfo(): Observable<string> {
-    return this.http.get(`${environment.apiUrl}/userInfo1`, {responseType:'text'});
+  public getUserInfo(): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/userInfo1`);
   }
 
 }
