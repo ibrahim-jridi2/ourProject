@@ -207,7 +207,7 @@ services:
     build:
       context: ../micro-shop
     ports:
-      - "8083:8761"
+      - "8083:8083"
     image: "shop"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
