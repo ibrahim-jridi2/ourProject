@@ -19,7 +19,11 @@ import org.springframework.security.web.authentication.switchuser.SwitchUserFilt
 import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -72,10 +76,21 @@ public class SecurityConfig {
         http.authorizeRequests()
                 .anyRequest()
                     .hasRole("user");
-
         http.addFilterAfter(jwtAuthUserFilterBean(), SwitchUserFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("*"); // Update this with the appropriate origin
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
 
 }

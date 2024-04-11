@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: '/api',
-  endpoint:'http://localhost:8080',
+  endpoint:'http://localhost:8088/api',
   keycloak: {
     // Url of the Identity Provider
     issuer: 'http://localhost:8081',
