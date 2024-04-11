@@ -1,9 +1,0 @@
-com\example\springapp\SpringAppApplication.class
-com\example\springapp\security\SecurityConfig.class
-com\example\springapp\entity\User.class
-com\example\springapp\entity\User$UserBuilder.class
-com\example\springapp\security\JwtUserSyncFilter.class
-com\example\springapp\repository\UserRepository.class
-com\example\springapp\service\UserService.class
-com\example\springapp\controller\WebController.class
-com\example\springapp\entity\User$Gender.class
