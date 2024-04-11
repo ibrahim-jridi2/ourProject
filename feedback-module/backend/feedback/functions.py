@@ -20,14 +20,14 @@ def parse_information(res,list_feedbacks):
         id = res[i]['pk']
         res[i].pop('pk')
         res[i]['fields']['id'] = id
-        res[i]['fields']['product']=requests.get(app_product_url +str(res[i]['fields']['product_id']),headers=headers ).json() if res[i]['fields']['product_id'] is not None else None
-        res[i]['fields'].pop("product_id")
-        res[i]['fields']['user']=requests.get(app_user_url +str(res[i]['fields']['user_id'] ),headers=headers).json() if res[i]['fields']['user_id'] is not None else None
-        res[i]['fields'].pop("user_id")
-        res[i]['fields']['activity']=requests.get(app_activity_url +str(res[i]['fields']['activity_id']),headers=headers ).json() if res[i]['fields']['activity_id'] is not None else None
-        res[i]['fields'].pop("activity_id") 
-        res[i]['fields']['camping_center']=requests.get(app_center_url +str(res[i]['fields']['comping_centre_id'] ),headers=headers).json() if res[i]['fields']['comping_centre_id'] is not None else None
-        res[i]['fields'].pop("comping_centre_id") 
+        # res[i]['fields']['product']=requests.get(app_product_url +str(res[i]['fields']['product_id']),headers=headers ).json() if res[i]['fields']['product_id'] is not None else None
+        # res[i]['fields'].pop("product_id")
+        # res[i]['fields']['user']=requests.get(app_user_url +str(res[i]['fields']['user_id'] ),headers=headers).json() if res[i]['fields']['user_id'] is not None else None
+        # res[i]['fields'].pop("user_id")
+        # res[i]['fields']['activity']=requests.get(app_activity_url +str(res[i]['fields']['activity_id']),headers=headers ).json() if res[i]['fields']['activity_id'] is not None else None
+        # res[i]['fields'].pop("activity_id") 
+        # res[i]['fields']['camping_center']=requests.get(app_center_url +str(res[i]['fields']['comping_centre_id'] ),headers=headers).json() if res[i]['fields']['comping_centre_id'] is not None else None
+        # res[i]['fields'].pop("comping_centre_id") 
         
         list_feedbacks.append(res[i]['fields'])
         
