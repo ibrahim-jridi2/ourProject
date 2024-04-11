@@ -2,11 +2,11 @@ version: "3.9"
 services:
 #keycloak-databases: (ibrahim)
   postgresql:
-    container_name: postgres1
+    container_name: postgresql
     image: postgres:14.4
     restart: always
     ports:
-      - "5433:5433"   # External port access for the development profile
+      - "5433:5432"   # External port access for the development profile
     environment:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
