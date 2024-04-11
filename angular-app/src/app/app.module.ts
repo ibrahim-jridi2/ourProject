@@ -10,6 +10,9 @@ import { UserInfoComponent } from './user-info/user-info.component';
 import {HttpClientModule} from "@angular/common/http";
 import { NotFoundComponent } from './components/not-found/not-found/not-found.component';
 import { UserListComponent } from './components/user-list/user-list.component';
+import { PostInfoComponent } from './post-info/post-info.component';
+import { CommentInfoComponent } from './comment-info/comment-info.component';
+import { FeedbackInfoComponent } from './feedback-info/feedback-info.component';
 
 
 @NgModule({
@@ -18,7 +21,10 @@ import { UserListComponent } from './components/user-list/user-list.component';
     AccessDeniedComponent,
     UserInfoComponent,
     NotFoundComponent,
-    UserListComponent
+    UserListComponent,
+    PostInfoComponent,
+    CommentInfoComponent,
+    FeedbackInfoComponent
   ],
   imports: [
     BrowserModule,

@@ -7,7 +7,7 @@ from eureka import eureka_init, stop_eureka
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'media_service.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'feedback_module.settings')
     if os.environ.get('RUN_MAIN'):
         print('run')
         eureka_init()

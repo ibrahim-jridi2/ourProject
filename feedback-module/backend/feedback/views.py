@@ -34,8 +34,8 @@ def getAllFeedback(request):
         feedbacksDict = serializers.serialize("json", feedbacks)
         res = json.loads(feedbacksDict)
         list_feedbacks=[]
-        list_feedbacks=parse_information(res,list_feedbacks)
-    return JsonResponse({"Feedback:": list_feedbacks})
+        # list_feedbacks=parse_information(res,list_feedbacks)
+    return JsonResponse({"Feedback:": res})
 @swagger_auto_schema(
     method='GET',
     
