@@ -126,6 +126,9 @@ services:
     image: "reservation"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
+    depends_on:
+      - mysqldb
+      - eurekaserver
 # #gateway micro (ibrahim): 
   gateway-micro:
     build:

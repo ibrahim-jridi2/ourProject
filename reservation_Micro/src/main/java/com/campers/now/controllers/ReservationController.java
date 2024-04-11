@@ -2,49 +2,46 @@ package com.campers.now.controllers;
 
 import com.campers.now.models.Reservation;
 import com.campers.now.services.ReservationService;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Reservation Management")
 @RestController
-@AllArgsConstructor
 @RequestMapping("reservations")
-@CrossOrigin(origins = "http://localhost:4200")
 public class ReservationController {
-    private final ReservationService reservationService;
+    @Autowired
+    private ReservationService reservationService;
 
-    @PostMapping
-    @PreAuthorize("hasRole('ROLE_CAMPER')")
-    public Reservation add(@RequestBody Reservation reservation) {
-        return reservationService.add(reservation);
-    }
-
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_CAMPER')")
-    public Reservation update(@RequestBody Reservation reservation, @PathVariable("id") Integer id) {
-        reservation.setId(id);
-        return reservationService.update(reservation);
+    @GetMapping
+    public List<Reservation> getAllReservations() {
+        return reservationService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Reservation getOne(@PathVariable("id") Integer id) {
-        return reservationService.getById(id);
+    public ResponseEntity<Reservation> getReservationById(@PathVariable Long id) {
+        return ResponseEntity.ok(reservationService.findById(id));
     }
 
-    @GetMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public List<Reservation> getAll() {
-
-        return reservationService.getAll();
+    @PostMapping
+    public Reservation createReservation(@RequestBody Reservation reservation) {
+        return reservationService.save(reservation);
     }
-    @GetMapping("/statistics")
-    public ResponseEntity<List<Object[]>> getReservationStatisticsByMonth() {
 
-        return reservationService.getReservationStatisticsByMonth();
+    @PutMapping("/{id}")
+    public Reservation updateReservation(@PathVariable Long id, @RequestBody Reservation reservationDetails) {
+        Reservation reservation = reservationService.findById(id);
+        reservation.setCustomerName(reservationDetails.getCustomerName());
+        reservation.setCampsite(reservationDetails.getCampsite());
+        reservation.setStartDate(reservationDetails.getStartDate());
+        reservation.setEndDate(reservationDetails.getEndDate());
+        return reservationService.save(reservation);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteReservation(@PathVariable Long id) {
+        reservationService.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }
