@@ -6,9 +6,9 @@ app_user_url="http://localhost:8091/api/users/"
 app_activity_url="http://localhost:8091/api/activities/"
 app_center_url="http://localhost:8091/api/camping-centers/"
 app_product_url="http://localhost:8091/api/products/"
-token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6W3siaWQiOjEsIm5hbWUiOiJST0xFX1NVUEVSX0FETUlOIn1dLCJqdGkiOjEsInN1YiI6ImFkbWluQHRlc3QuY29tIiwiaWF0IjoxNzEwOTY3MDY1LCJleHAiOjE3MTIyNjMwNjV9.js_aTusLlxdpjOYly8hc39P1W2tHtjC-6G_-Ucauzq4"
+# token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6W3siaWQiOjEsIm5hbWUiOiJST0xFX1NVUEVSX0FETUlOIn1dLCJqdGkiOjEsInN1YiI6ImFkbWluQHRlc3QuY29tIiwiaWF0IjoxNzEwOTY3MDY1LCJleHAiOjE3MTIyNjMwNjV9.js_aTusLlxdpjOYly8hc39P1W2tHtjC-6G_-Ucauzq4"
 headers = {
-"Authorization": token,
+# "Authorization": token,
 "Content-Type" : "application/json"
 }
 
