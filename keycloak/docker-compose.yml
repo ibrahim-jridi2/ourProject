@@ -6,7 +6,7 @@ services:
     image: postgres:14.4
     restart: always
     ports:
-      - "5433:5432"   # External port access for the development profile
+      - "5433:5433"   # External port access for the development profile
     environment:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
@@ -58,8 +58,8 @@ services:
       POSTGRES_DB: keycloak
       POSTGRES_HOST: postgres
       # - "POSTGRES_HOST_AUTH_METHOD=trust"
-    networks:
-      - local
+    # networks:
+    #   - local
     ports:
       - "5432:5432"
 
@@ -105,14 +105,17 @@ services:
 
 
 # auth micro (ibrahim): 
-  auth-micro:
+  auth-micro-app:
     build:
-      context: ../spring-app
+      context: ./../spring-app
     ports:
-      - "8088:8761"
-    image: "auth"
+      - "8080:8761"
+    image: "auth-micro"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
+      # SPRING_APPLICATION_JSON: '{"spring.datasource.url": "jdbc:postgresql://postgres1:5433/keycloak?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true", "spring.datasource.username": "admin", "spring.datasource.password": "admin", "spring.jpa.properties.hibernate.dialect": "org.hibernate.dialect.PostgreSQLDialect", "spring.jpa.hibernate.ddl-auto": "update", "eureka.client.service-url.defaultZone": "http://localhost:8761/eureka", "eureka.client.register-with-eureka": true}'
+    depends_on:
+      - postgresql
 
 #reservation micro (ayed):
   reservation-micro:
@@ -129,7 +132,7 @@ services:
       context: ../API_GATEWAY_SERVE
     ports:
       - "9999:8761"
-    image: "auth"
+    image: "gateway"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eurekaserver:8761/eureka/
 
@@ -137,7 +140,7 @@ services:
 ### (amani bouhrira)
 
 
-  feedback-servicee-app-finall:
+  feedback-servicee-appl:
     build: ../feedback-module
     # restart: always
     command:  sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
@@ -147,8 +150,8 @@ services:
       - "127.0.0.1:8000:8000"
     volumes:
       - .:/code
-    networks:
-      - local
+    # networks:
+    #   - local
     links:
       - postgres
     depends_on:

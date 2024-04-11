@@ -1,11 +1,11 @@
-export interface User {
-    email: string;
-    firstname: string;
-    lastname: string;
-    gender: Gender;
+export interface Feedback {
+    label: string;
+    description: string;
+    likes: bigint;
+    dislikes: bigint;
+    is_active:boolean
+    created_at:string;
+    updated_at:string;
   }
   
-  export enum Gender {
-    MALE = 'MALE',
-    FEMALE = 'FEMALE'
-  }
+ 
