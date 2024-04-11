@@ -643,7 +643,8 @@
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "http://localhost:8080/*"
+        "http://localhost:8080/*",
+        "http://localhost:8088/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
