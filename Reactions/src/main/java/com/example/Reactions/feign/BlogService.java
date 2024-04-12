@@ -5,9 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient("POST")
-public interface PostService {
+@FeignClient("BLOG")
+public interface BlogService {
     @GetMapping("/info/{id}")
-    public ResponseEntity<PostDto> getBlog(@PathVariable Integer id);
+    public ResponseEntity<BlogDto> getBlog(@PathVariable Integer id);
 
 }

@@ -44,4 +44,11 @@ public class WebController {
         return userService.findUsers();
     }
 
+
+    @GetMapping("/{email}")
+    public User getUserInfobyEmail(@PathVariable String email) {
+        return userService.findByEmail(email);
+
+    }
+
 }

@@ -1,0 +1,65 @@
+version: '3.8'
+services:
+
+  eureka-server:
+    image: springcloud/eureka
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_APPLICATION_NAME=EurekaServer
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - EUREKA_CLIENT_REGISTERWITHEUREKA=false
+      - EUREKA_CLIENT_FETCHREGISTRY=false
+
+  mariadb:
+    image: mariadb:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_USER: root
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+
+  getaway-service:
+    image: getaway-service:latest
+    ports:
+      - "9999:8080"
+    depends_on:
+      - eureka-server
+
+  raections-service:
+    image: raections-service:latest
+    ports:
+      - "8045:8045"
+    depends_on:
+      - getaway-service
+      - mariadb
+
+  comments-service:
+    image: comments-service:latest
+    ports:
+      - "8050:8050"
+    depends_on:
+      - getaway-service
+      - mariadb
+
+  blog-service:
+    image: blog-service:latest
+    ports:
+      - "8065:8065"
+    depends_on:
+      - mariadb
+      - getaway-service
+
+  app-user-service:
+    image: app-user:latest
+    ports:
+      - "8070:8070"
+    depends_on:
+      - mariadb
+      - getaway-service
+
+volumes:
+  mariadb_data:

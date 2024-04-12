@@ -8,7 +8,7 @@ import java.util.Date;
 public class CommentsDto {
     private Integer id;
     private Integer iduser;
-    private Integer commentId;
+    private Integer blogId;
     private String content;
     private Date commentedAt;
     private Integer parentCommentId;

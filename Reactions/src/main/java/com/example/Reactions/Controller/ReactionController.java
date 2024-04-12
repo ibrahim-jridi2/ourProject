@@ -1,7 +1,6 @@
 package com.example.Reactions.Controller;
 
 import com.example.Reactions.feign.UserDTO;
-import com.example.Reactions.model.ForWho;
 import com.example.Reactions.model.Reaction;
 import com.example.Reactions.model.ReactionType;
 import com.example.Reactions.services.ReactionServices;
@@ -21,30 +20,57 @@ import java.util.Map;
 public class ReactionController {
 
     private ReactionServices reactionService;
+    //create a reaction lel nimporte qui
+    @PostMapping("/create")
+    public ResponseEntity<Reaction> createReaction(@RequestBody Reaction reaction) {
+        Reaction createdReaction = reactionService.create(reaction);
+        return new ResponseEntity<>(createdReaction, HttpStatus.CREATED);
+    }
+    @GetMapping("/info/{blogid}")
+    public ResponseEntity<Map<ReactionType, Long>> getReactionsCountForBlog(@PathVariable Integer blogid) {
+        Map<ReactionType, Long> reactionCounts = reactionService.getReactionsCountByBlogId(blogid);
+        return ResponseEntity.ok(reactionCounts);
+    }
+    //get all reaction
+    @GetMapping("/ofblog/{idblog}")
+    public List<Reaction> getreactionofblog(@PathVariable("idblog") Integer idblog) {
+        return reactionService.getAllReactionsofBlog(idblog);
+    }
 
-    @PostMapping("/saveOrUpdate")
-    public ResponseEntity<Reaction> createReaction2(@RequestBody Reaction reaction) {
-        reactionService.saveOrUpdateReaction(reaction);
+    @GetMapping("/all_reactions")
+    public List<Reaction> getAllReactions() {
+        return reactionService.getAllReactions();
+    }
+
+    // ta3tini el 3bed eli 3amlou like 3ala el blog x
+    @GetMapping("/{blogid}/{reactiontype}")
+    public List<UserDTO> getAllReactionsbyblogandtype(@PathVariable("blogid")Integer idblog, @PathVariable("reactiontype") String reactiontype) {
+        return reactionService.getReactionByblogandtype(idblog,reactiontype);
+    }
+    // ta3tini reaction by id
+    @GetMapping("/{id}")
+    public ResponseEntity<Reaction> getReactionById(@PathVariable Integer id) {
+        Reaction reaction = reactionService.getReactionById(id);
         if (reaction != null) {
-            return ResponseEntity.ok(reaction);
+            return new ResponseEntity<>(reaction, HttpStatus.OK);
         } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+    @GetMapping("/blog_user/{iduser}/{blogid}")
+    public ResponseEntity<ReactionType> getAllReactionsByBlogAndType(@PathVariable("blogid") Integer idblog,@PathVariable("iduser") Integer iduser) {
+            ReactionType reactionType = reactionService.getMyReactionOfThisBlog(idblog, iduser);
+            return ResponseEntity.ok(reactionType);
     }
 
-    @GetMapping("/{userid}/{forWho}/{forWhoid}")
-    public Reaction getReaction(@PathVariable("userid")Integer userid,@PathVariable("forWho")ForWho forWho,@PathVariable("forWhoid")Integer forwhoid)
-    {
-        try {
-            return reactionService.getReaction(userid,forWho,forwhoid);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteReaction(@PathVariable Integer id) {
+        reactionService.deleteReaction(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    @DeleteMapping("/delete//{userid}/{forWho}/{forWhoid}")
-    public void delete(@PathVariable("userid")Integer userid,@PathVariable("forWho")ForWho forWho,@PathVariable("forWhoid")Integer forwhoid)
-    {
-        reactionService.delete(userid,forWho,forwhoid);
+    @DeleteMapping("/deleteByBlogAndUser/{id}/{idblog}")
+    public void deleteReaction(@PathVariable("id")Integer id, @PathVariable("idblog") Integer idblog) {
+         reactionService.deleteReactionbyboganduser(id ,idblog);
     }
 
 }

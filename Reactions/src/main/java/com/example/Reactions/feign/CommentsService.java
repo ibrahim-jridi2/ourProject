@@ -10,6 +10,6 @@ import java.util.List;
 @FeignClient("COMMENTS")
 public interface CommentsService {
 
-    @GetMapping("/byBlogId/{blogId}")// GET all comment for a special post ?
+    @GetMapping("/byBlogId/{blogId}")
     public ResponseEntity<List<CommentsDto>> getCommentsByBlogId(@PathVariable Integer blogId);
 }
